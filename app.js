@@ -47,6 +47,7 @@ app.get('/index.html', function (req, res) {
 })
 
 app.get('/', function (req, res) {
+	console.log(PORT, fbToken);
 	res.send('Hello world!');
 });
 
