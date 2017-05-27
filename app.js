@@ -39,7 +39,7 @@ app.get('/index.html', function (req, res) {
 })
 
 app.get('/', function (req, res) {
-	
+	res.send('Succes!');
 });
 
 app.post('/esims_login', urlencodedParser, function (req, res) {
