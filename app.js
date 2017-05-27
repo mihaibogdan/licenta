@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var _ = require('lodash');
+var PORT = process.env.PORT || 8080;
+var fbToken = process.env.PAGE_ACCESS_TOKEN;
 
 request = request.defaults({jar: true});
 
@@ -129,10 +131,10 @@ function sendTextMessage(recipientId, messageText) {
 
 function callSendAPI(messageData) {
 	console.log('callSendAPI', messageData);
-	console.log('page access token', process.env.PAGE_ACCESS_TOKEN);
+	console.log('page access token', fbToken);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
+    qs: { access_token: fbToken },
     method: 'POST',
     json: messageData
 
