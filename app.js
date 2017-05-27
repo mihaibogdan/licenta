@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var _ = require('lodash');
-var PORT = 5000;
+var PORT = process.env.port;
 var PAGE_ACCESS_TOKEN = 'EAAGHOUlg6hYBACbz4EgqOvhP9i17OyHfeZCc2pOyZCqFtSGsOnH54EVH23rW4WErIzXibpyHdrWhCclFivmfZAsXZCQwsdbL5xg1hvk1SQG0zUuK3FFYEbVhBbZBqhEjDgTPStSZBc8iGbhIi9Sh2mBnjjxDM5euhfgxbx1V2LMQZDZD';
 
 request = request.defaults({jar: true});
@@ -135,7 +135,7 @@ function callSendAPI(messageData) {
 	console.log('page access token', PAGE_ACCESS_TOKEN);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
+    qs: { access_token: PAGE_ACCESS_TOKEN	 },
     method: 'POST',
     json: messageData
 
