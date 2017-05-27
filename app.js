@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var _ = require('lodash');
-var PORT = process.env.PORT || 8080;
-var fbToken = process.env.PAGE_ACCESS_TOKEN;
+var PORT = 5000;
+var PAGE_ACCESS_TOKEN = 'EAAGHOUlg6hYBACbz4EgqOvhP9i17OyHfeZCc2pOyZCqFtSGsOnH54EVH23rW4WErIzXibpyHdrWhCclFivmfZAsXZCQwsdbL5xg1hvk1SQG0zUuK3FFYEbVhBbZBqhEjDgTPStSZBc8iGbhIi9Sh2mBnjjxDM5euhfgxbx1V2LMQZDZD';
 
 request = request.defaults({jar: true});
 
@@ -132,10 +132,10 @@ function sendTextMessage(recipientId, messageText) {
 
 function callSendAPI(messageData) {
 	console.log('callSendAPI', messageData);
-	console.log('page access token', fbToken);
+	console.log('page access token', PAGE_ACCESS_TOKEN);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: fbToken },
+    qs: { access_token: PAGE_ACCESS_TOKEN },
     method: 'POST',
     json: messageData
 
@@ -207,6 +207,6 @@ app.get('/get_note', function (req, res) {
 
 
 
-app.listen(process.env.PORT, function () {
+app.listen(PORT, function () {
   console.log('Example app listening on port 3000!');
 });
