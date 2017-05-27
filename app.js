@@ -39,7 +39,15 @@ app.get('/index.html', function (req, res) {
 })
 
 app.get('/', function (req, res) {
-	res.send('Succes!');
+	res.send('Hello world!');
+});
+
+app.get('/webhook', function (req, res) {
+	if (req.query['hub.verify_token'] === 'esims_bot_verify_token') {
+	  res.send(req.query['hub.challenge']);
+	} else {
+	  res.send('Error, wrong validation token');    
+	}
 });
 
 app.post('/esims_login', urlencodedParser, function (req, res) {
