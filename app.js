@@ -9,6 +9,12 @@ var _ = require('lodash');
 
 request = request.defaults({jar: true});
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 var hiddenInputs = [
 	'__VIEWSTATE',
 	'__VIEWSTATEGENERATOR',
@@ -50,9 +56,10 @@ app.get('/webhook', function (req, res) {
 	}
 });
 
-app.post('/webhook', urlencodedParser, function (req, res) {
+app.post('/webhook', function (req, res) {
   var data = req.body;
 
+  console.log(data);
   // Make sure this is a page subscription
   if (data.object === 'page') {
 
