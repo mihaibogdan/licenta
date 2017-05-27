@@ -59,7 +59,6 @@ app.get('/webhook', function (req, res) {
 app.post('/webhook', function (req, res) {
   var data = req.body;
 
-  console.log(data);
   // Make sure this is a page subscription
   if (data.object === 'page') {
 
@@ -129,6 +128,7 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 function callSendAPI(messageData) {
+	console.log('callSendAPI', messageData);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
