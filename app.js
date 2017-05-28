@@ -115,6 +115,9 @@ function receivedMessage(event) {
         case 'logout':
             sendLogoutButton(senderID);
             break;
+        case 'note':
+            getNote(senderID);
+            break;
       default:
             sendTextMessage(senderID, messageText);
     }
@@ -123,10 +126,28 @@ function receivedMessage(event) {
   }
 }
 
-function sendLoginButton(userId) {
+function getNote(userID) {
+    var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
+    request(url, function(err, resp, body) {
+        if (err)
+            throw err;
+        $ = cheerio.load(body);
+
+        var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
+
+        for(var i = 0; i < discipline.length; i++) {
+            if (i > 0) {
+                sendTextMessage(userID, discipline[i].children[4].children[0].children[0].data + ' ' + discipline[i].children[5].children[0].children[0].data);
+            }
+        }
+
+    });
+}
+
+function sendLoginButton(userID) {
     var messageData = {
         "recipient": {
-            "id": userId
+            "id": userID
         },
         "message": {
             "attachment": {
@@ -148,10 +169,10 @@ function sendLoginButton(userId) {
     callSendAPI(messageData);
 };
 
-function sendLogoutButton(userId) {
+function sendLogoutButton(userID) {
     var messageData = {
         "recipient": {
-            "id": userId
+            "id": userID
         },
         "message": {
             "attachment": {
@@ -250,29 +271,6 @@ app.post('/esims_login', urlencodedParser, function (req, res) {
         return res.send(400, 'Request did not contain redirect_uri in the query string');
     }
 });
-
-app.get('/get_note', function (req, res) {
-	var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-    request(url, function(err, resp, body) {
-        if (err)
-            throw err;
-        $ = cheerio.load(body);
-
-        var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
-
-        var html = '';
-		for(var i = 0; i < discipline.length; i++) {
-			if (i > 0) {
-				html += '<p>' + discipline[i].children[4].children[0].children[0].data + ' ' + discipline[i].children[5].children[0].children[0].data + '</p>'; 
-			}
-		}
-
-        res.send(html);
-    });
-});
-
-
-
 
 
 app.listen(process.env.PORT, function () {
