@@ -60,6 +60,7 @@ app.get('/webhook', function (req, res) {
 
 app.post('/webhook', function (req, res) {
   var data = req.body;
+  console.log('data', data);
 
   // Make sure this is a page subscription
   if (data.object === 'page') {
@@ -181,7 +182,6 @@ function callSendAPI(messageData) {
 }
 
 app.post('/esims_login', urlencodedParser, function (req, res) {
-    console.log(req.body);
     if (req.body && req.body.redirect_uri) {
         var username = req.body['ctl00$mainCopy$Login1$UserName'];
         var password = req.body['ctl00$mainCopy$Login1$Password'];
