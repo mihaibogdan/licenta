@@ -212,7 +212,7 @@ app.post('/esims_login', urlencodedParser, function (req, res) {
                     throw err
                 }
 
-                var redirectUri = redirect_uri + '&authorization_code=' + username + '/' + password;
+                var redirectUri = redirect_uri + '&authorization_code=' + username;
                 return res.redirect(redirectUri);
             })
 
