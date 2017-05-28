@@ -42,8 +42,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/index.html', function (req, res) {
-   res.sendFile( __dirname + "/" + "index.html" );
+app.get('/static/index.html', function (req, res) {
+   res.sendFile( __dirname + "/static/" + "index.html" );
 });
 
 app.get('/', function (req, res) {
@@ -133,7 +133,7 @@ function sendLoginButton(userId) {
                     "buttons": [
                         {
                             "type": "account_link",
-                            "url": "https://pure-waters-25616.herokuapp.com/index.html"
+                            "url": "https://pure-waters-25616.herokuapp.com/static/index.html"
                         }
                     ]
                 }
@@ -181,36 +181,48 @@ function callSendAPI(messageData) {
 }
 
 app.post('/esims_login', urlencodedParser, function (req, res) {
-	payload['ctl00$mainCopy$Login1$UserName'] = req.body['ctl00$mainCopy$Login1$UserName'];
-	payload['ctl00$mainCopy$Login1$Password'] = req.body['ctl00$mainCopy$Login1$Password'];
 
-	var url = 'http://simsweb.uaic.ro/eSIMS/MyLogin.aspx?ReturnUrl=%2feSIMS%2fdefault.aspx';
-    request(url, function(err, resp, body) {
-        if (err)
-            throw err;
-        $ = cheerio.load(body);
+    if (req.query && req.query.redirect_uri && req.query.username) {
+        var username = req.body['ctl00$mainCopy$Login1$UserName'];
+        var password = req.body['ctl00$mainCopy$Login1$Password'];
+        var redirect_uri = req.body['redirect_uri'];
 
-        _.forEach(hiddenInputs, function (input) {
-        	payload[input] = $('#' + input).val();
+        payload['ctl00$mainCopy$Login1$UserName'] = req.body['ctl00$mainCopy$Login1$UserName'];
+        payload['ctl00$mainCopy$Login1$Password'] = req.body['ctl00$mainCopy$Login1$Password'];
+
+        var url = 'http://simsweb.uaic.ro/eSIMS/MyLogin.aspx?ReturnUrl=%2feSIMS%2fdefault.aspx';
+        request(url, function(err, resp, body) {
+            if (err)
+                throw err;
+            $ = cheerio.load(body);
+
+            _.forEach(hiddenInputs, function (input) {
+                payload[input] = $('#' + input).val();
+            });
+
+            var options = {
+                method: 'post',
+                form: payload,
+                url: url
+            };
+
+            request(options, function (err, response, body) {
+                if (err) {
+                    console.error('error posting json: ', err)
+                    throw err
+                }
+
+                var redirectUri = redirect_uri + '&authorization_code=' + username + '/' + password;
+                return res.redirect(redirectUri);
+            })
+
         });
 
-        var options = {
-			method: 'post',
-			form: payload,
-			url: url
-		};
 
-    	request(options, function (err, response, body) {
-		  if (err) {
-		    console.error('error posting json: ', err)
-		    throw err
-		  }
-		 
-		  res.send('Succes!');
-		})
-    
-    });
-})
+    } else {
+        return res.send(400, 'Request did not contain redirect_uri and username in the query string');
+    }
+});
 
 app.get('/get_note', function (req, res) {
 	var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
@@ -231,6 +243,8 @@ app.get('/get_note', function (req, res) {
         res.send(html);
     });
 });
+
+
 
 
 
