@@ -112,6 +112,9 @@ function receivedMessage(event) {
         case 'login':
             sendLoginButton(senderID);
             break;
+        case 'logout':
+            sendLogoutButton(senderID);
+            break;
       default:
             sendTextMessage(senderID, messageText);
     }
@@ -135,6 +138,30 @@ function sendLoginButton(userId) {
                         {
                             "type": "account_link",
                             "url": "https://pure-waters-25616.herokuapp.com/static/index.html"
+                        }
+                    ]
+                }
+            }
+        }
+    };
+
+    callSendAPI(messageData);
+};
+
+function sendLogoutButton(userId) {
+    var messageData = {
+        "recipient": {
+            "id": userId
+        },
+        "message": {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "button",
+                    "text": "Logout",
+                    "buttons": [
+                        {
+                            "type": "account_unlink"
                         }
                     ]
                 }
