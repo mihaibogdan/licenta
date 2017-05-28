@@ -3,7 +3,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 
 var bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var _ = require('lodash');
 
@@ -15,7 +15,7 @@ var hiddenInputs = [
 	'__VIEWSTATE',
 	'__VIEWSTATEGENERATOR',
 	'__EVENTVALIDATION'
-]
+];
 
 var payload = {
 	'__WPPS': 's',
@@ -32,19 +32,19 @@ var payload = {
 	'ctl00$mainCopy$Login1$UserName': '',
 	'ctl00$mainCopy$Login1$Password': '',
 	'ctl00$mainCopy$Login1$LoginButton': 'Conectare'
-}
+};
 
 var app = express();
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 app.get('/index.html', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
-})
+});
 
 app.get('/', function (req, res) {
 	res.send('Hello world!');
@@ -108,13 +108,41 @@ function receivedMessage(event) {
     // If we receive a text message, check to see if it matches a keyword
     // and send back the example. Otherwise, just echo the text we received.
     switch (messageText) {
+        case 'login':
+            sendLoginButton(senderId);
+            break;
       default:
-        sendTextMessage(senderID, messageText);
+            sendTextMessage(senderID, messageText);
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
+
+function sendLoginButton(userId) {
+    var messageData = {
+        "recipient": {
+            "id": userId
+        },
+        "message": {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "button",
+                    "text": "Login",
+                    "buttons": [
+                        {
+                            "type": "account_link",
+                            "url": "https://pure-waters-25616.herokuapp.com/index.html"
+                        }
+                    ]
+                }
+            }
+        }
+    };
+
+    callSendAPI(messageData);
+};
 
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
@@ -130,8 +158,7 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 function callSendAPI(messageData) {
-	console.log('callSendAPI', messageData);
-	console.log('page access token', PAGE_ACCESS_TOKEN );
+
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -165,13 +192,14 @@ app.post('/esims_login', urlencodedParser, function (req, res) {
 
         _.forEach(hiddenInputs, function (input) {
         	payload[input] = $('#' + input).val();
-        })
+        });
 
         var options = {
 			method: 'post',
 			form: payload,
 			url: url
-		}
+		};
+
     	request(options, function (err, response, body) {
 		  if (err) {
 		    console.error('error posting json: ', err)
