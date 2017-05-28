@@ -181,7 +181,7 @@ function callSendAPI(messageData) {
 }
 
 app.post('/esims_login', urlencodedParser, function (req, res) {
-
+    console.log(req.query);
     if (req.query && req.query.redirect_uri) {
         var username = req.body['ctl00$mainCopy$Login1$UserName'];
         var password = req.body['ctl00$mainCopy$Login1$Password'];
@@ -220,7 +220,7 @@ app.post('/esims_login', urlencodedParser, function (req, res) {
 
 
     } else {
-        return res.send(400, 'Request did not contain redirect_uri and username in the query string');
+        return res.send(400, 'Request did not contain redirect_uri in the query string');
     }
 });
 
