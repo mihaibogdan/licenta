@@ -109,7 +109,7 @@ function receivedMessage(event) {
     // and send back the example. Otherwise, just echo the text we received.
     switch (messageText) {
         case 'login':
-            sendLoginButton(senderId);
+            sendLoginButton(senderID);
             break;
       default:
             sendTextMessage(senderID, messageText);
