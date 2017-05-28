@@ -182,7 +182,7 @@ function callSendAPI(messageData) {
 
 app.post('/esims_login', urlencodedParser, function (req, res) {
 
-    if (req.query && req.query.redirect_uri && req.query.username) {
+    if (req.query && req.query.redirect_uri) {
         var username = req.body['ctl00$mainCopy$Login1$UserName'];
         var password = req.body['ctl00$mainCopy$Login1$Password'];
         var redirect_uri = req.body['redirect_uri'];
