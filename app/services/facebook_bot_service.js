@@ -49,7 +49,14 @@ module.exports = function() {
 
     function scrapeNotes(userID) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-        request(url, function(err, resp, body) {
+        var options = {
+            method: 'post',
+            form: {
+                '__EVENTARGUMENT': 'Select$2'
+            },
+            url: url
+        };
+        request(options, function(err, resp, body) {
             if (err)
                 throw err;
             var $ = cheerio.load(body);
