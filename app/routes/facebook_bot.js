@@ -25,7 +25,10 @@ router.post('/webhook', function (req, res) {
                     fb_bot_service.handleMessage(event)
                 } else if (event.account_linking) {
                     if (event.account_linking.status === 'linked') {
-                        firebase.database.ref('users').set({event.sender.id: event.account_linking.authorization_code});
+                        var newUser = {};
+                        newUser[event.sender_id] = event.account_linking.authorization_code;
+
+                        firebase.database.ref('users').set(newUser);
                     } else {
                         firebase.database.ref('users').child(event.sender_id).remove();
                     }
