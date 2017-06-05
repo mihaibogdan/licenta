@@ -32,7 +32,7 @@ var payload = {
 
 
 module.exports = () => {
-    let receivedMessage = (event) => {
+    function receivedMessage(event) {
         var senderID = event.sender.id;
 
         var message = event.message;
@@ -60,7 +60,7 @@ module.exports = () => {
         }
     }
 
-    let getNote = (userID) => {
+    function getNote(userID) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         request(url, function(err, resp, body) {
             if (err)
@@ -78,18 +78,18 @@ module.exports = () => {
         });
     }
 
-    let sendLoginButton = (userID) => {
+    function sendLoginButton(userID) {
         var messageData = templates_service.loginButton(userID);
 
         communication_service.callSendAPI(messageData);
     }
 
-    let sendLogoutButton = (userID) => {
+    function sendLogoutButton(userID) {
         var messageData = templates_service.logoutButton(userID);
         communication_service.callSendAPI(messageData);
     }
 
-    let login = (username, password) => {
+    function login(username, password) {
         return new Promise(function(resolve, reject) {
             payload['ctl00$mainCopy$Login1$UserName'] = username;
             payload['ctl00$mainCopy$Login1$Password'] = password;
