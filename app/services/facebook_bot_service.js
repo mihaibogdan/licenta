@@ -64,7 +64,7 @@ module.exports = function() {
 
     function startScrappingNotes(userID) {
         verifyIfLoggedIn().then(function(loggedIn) {
-            console.log('verifyIfLoggedIn ok');
+            console.log('verifyIfLoggedIn ok', loggedIn);
             if (!loggedIn) {
                 firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                     var user = snapshot.val();
@@ -82,7 +82,7 @@ module.exports = function() {
                     });
                 })
             } else {
-                scrapeNotes(userID)
+                scrapeNotes(userID);
             }
         });
     }
