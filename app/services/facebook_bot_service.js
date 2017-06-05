@@ -51,7 +51,7 @@ module.exports = function() {
         auth_service.keepConnectionAlive(userID, request)
             .then(function() {
                 scrapeNotes(userID);
-            })
+            }) 
             .catch(function(err) {
                 console.log('keepConnectionAlive', err);
             });
