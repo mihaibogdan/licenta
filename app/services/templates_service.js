@@ -1,5 +1,5 @@
 module.exports = {
-    loginButton: function(userId) {
+    loginButton: function(userID) {
 
         var message = {
             "recipient": {
