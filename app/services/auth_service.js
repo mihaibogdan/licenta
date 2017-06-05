@@ -29,7 +29,8 @@ var payload = {
     '__EVENTVALIDATION': '',
     'ctl00$mainCopy$Login1$UserName': '',
     'ctl00$mainCopy$Login1$Password': '',
-    'ctl00$mainCopy$Login1$LoginButton': 'Conectare'
+    'ctl00$mainCopy$Login1$LoginButton': 'Conectare',
+    'ctl00$mainCopy$Login1$RememberMe': 'on'
 };
 
 
