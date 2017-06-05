@@ -42,7 +42,6 @@ module.exports = function() {
     function startScrappingNotes(userID) {
         auth_service.keepConnectionAlive(userID)
             .then(function() {
-                console.log('scrapeNotes');
                 scrapeNotes(userID);
             })
             .catch(function(err) {

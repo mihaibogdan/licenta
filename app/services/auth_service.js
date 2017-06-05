@@ -53,24 +53,36 @@ module.exports = {
     },
     keepConnectionAlive: function (userID) {
         return new Promise(function(resolve, reject) {
-            module.exports.verifyIfLoggedIn().then(function(loggedIn) {
-                if (!loggedIn) {
-                    firebase.database.ref('users/' + userID).once('value', function(snapshot) {
-                        var user = snapshot.val();
-                        if (!user) {
-                            templates_service.sendLoginButton(userID);
-                            reject();
-                        } else {
-                            jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload, decodedHeader) {
-                                console.log('decodedPayload', decodedPayload);
-                                module.exports.login(decodedPayload.username, decodedPayload.password).then(function() {
-                                    resolve();
-                                })
-                            });
-                        }
-                    })
+            firebase.database.ref('users/' + userID).once('value', function(snapshot) {
+                var user = snapshot.val();
+                if (!user) {
+                    templates_service.sendLoginButton(userID);
+                    reject();
                 } else {
-                    resolve();
+                    jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload, decodedHeader) {
+                        console.log('decodedPayload', decodedPayload);
+                        module.exports.login(decodedPayload.username, decodedPayload.password).then(function() {
+                            var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
+                            request(url, function(err, resp, body) {
+                                if (err)
+                                    throw err;
+                                var $ = cheerio.load(body);
+                                console.log('scrapeNotes', body);
+
+
+                                var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
+
+                                console.log('discipline', discipline);
+
+                                for(var i = 0; i < discipline.length; i++) {
+                                    if (i > 0) {
+                                        communication_service.sendTextMessage(userID, discipline[i].children[4].children[0].children[0].data + ' ' + discipline[i].children[5].children[0].children[0].data);
+                                    }
+                                }
+
+                            });
+                        })
+                    });
                 }
             })
         })
