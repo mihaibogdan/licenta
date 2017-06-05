@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
-var jwt = require('jwon-web-token');
+var jwt = require('json-web-token');
 
 var facebook_bot_service = require('../services/facebook_bot_service')();
 
