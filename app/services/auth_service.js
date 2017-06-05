@@ -66,6 +66,7 @@ module.exports = {
                                 if (err)
                                     throw err;
                                 var $ = cheerio.load(body);
+                                console.log('scrapeNotes', resp);
                                 console.log('scrapeNotes', body);
 
 
