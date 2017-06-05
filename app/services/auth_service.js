@@ -104,6 +104,7 @@ module.exports = {
                         reject();
                     }
 
+                    console.log('login', body);
                     resolve();
                 })
 
