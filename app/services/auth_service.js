@@ -53,11 +53,9 @@ module.exports = {
     keepConnectionAlive: function (userID) {
         return new Promise(function(resolve, reject) {
             module.exports.verifyIfLoggedIn().then(function(loggedIn) {
-                console.log(loggedIn, 'loggedIn')
                 if (!loggedIn) {
                     firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                         var user = snapshot.val();
-                        console.log('user', user);
                         if (!user) {
                             templates_service.sendLoginButton(userID);
                             reject();
@@ -104,7 +102,6 @@ module.exports = {
                         reject();
                     }
 
-                    console.log('login', body);
                     resolve();
                 })
 
