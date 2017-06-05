@@ -31,8 +31,8 @@ var payload = {
 };
 
 
-module.exports = () => {
-    function receivedMessage(event) {
+module.exports = function() {
+    exports.receivedMessage = function(event) {
         var senderID = event.sender.id;
 
         var message = event.message;
@@ -58,7 +58,7 @@ module.exports = () => {
         } else if (messageAttachments) {
             communication_service.sendTextMessage(senderID, "Message with attachment received");
         }
-    }
+    };
 
     function getNote(userID) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
@@ -89,7 +89,7 @@ module.exports = () => {
         communication_service.callSendAPI(messageData);
     }
 
-    function login(username, password) {
+    exports.login = function(username, password) {
         return new Promise(function(resolve, reject) {
             payload['ctl00$mainCopy$Login1$UserName'] = username;
             payload['ctl00$mainCopy$Login1$Password'] = password;
@@ -121,11 +121,7 @@ module.exports = () => {
 
             });
         })
-    }
-
-    return {
-        login: login,
-        handleMessage: receivedMessage
     };
-
+    
+    return exports;
 }
