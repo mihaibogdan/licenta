@@ -30,12 +30,13 @@ module.exports = {
                 if (!loggedIn) {
                     firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                         var user = snapshot.val();
-
+                        console.log('user', user);
                         if (!user) {
                             templates_service.sendLoginButton(userID);
                             reject();
                         } else {
                             jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload, decodedHeader) {
+                                console.log('decodedPayload', decodedPayload);
                                 module.exports.login(decodedPayload.username, decodedPayload.password).then(function() {
                                     resolve();
                                 })
