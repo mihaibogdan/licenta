@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var jwt = require('jwon-web-token');
 
 var facebook_bot_service = require('../services/facebook_bot_service')();
 
@@ -13,8 +14,18 @@ router.post('/login', urlencodedParser, function (req, res) {
         var redirect_uri = req.body['redirect_uri'];
 
         facebook_bot_service.login(username, password).then(function () {
-            var redirectUri = redirect_uri + '&authorization_code=' + username;
-            return res.redirect(redirectUri);
+            var payload = { username: username, password: password };
+            var secret = process.env.JWT_SECRET;
+
+            jwt.encode(secret, payload, function (err, token) {
+                if (err) {
+                    console.error(err.name, err.message);
+                } else {
+                    var redirectUri = redirect_uri + '&authorization_code=' + token;
+                    return res.redirect(redirectUri);
+                }
+            });
+
         })
 
 

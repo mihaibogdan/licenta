@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var fb_bot_service = require('../services/facebook_bot_service')();
+var firebase = require('../lib/firebase');
 
 router.get('/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === 'esims_bot_verify_token') {
@@ -22,6 +23,12 @@ router.post('/webhook', function (req, res) {
             entry.messaging.forEach(function(event) {
                 if (event.message) {
                     fb_bot_service.handleMessage(event)
+                } else if (event.account_linking) {
+                    if (event.account_linking.authorization_code) {
+                        firebase.database.ref('users').set({event.sender.id: event.account_linking.authorization_code});
+                    } else {
+                        firebase.database.ref('users').child(event.sender_id).remove();
+                    }
                 } else {
                     console.log("Webhook received unknown event: ", event);
                 }
