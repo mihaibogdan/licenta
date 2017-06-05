@@ -1,4 +1,3 @@
-var request = require('request');
 var Promise = require('promise');
 var cheerio = require('cheerio');
 var jwt = require('json-web-token');
@@ -34,7 +33,7 @@ var payload = {
 
 
 module.exports = {
-    verifyIfLoggedIn: function () {
+    verifyIfLoggedIn: function (request) {
         return new Promise(function(resolve, reject) {
             var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
             request(url, function(err, resp, body) {
@@ -52,7 +51,7 @@ module.exports = {
     },
     keepConnectionAlive: function (userID, request) {
         return new Promise(function(resolve, reject) {
-            module.exports.verifyIfLoggedIn().then(function(loggedIn) {
+            module.exports.verifyIfLoggedIn(request).then(function(loggedIn) {
                 if (!loggedIn) {
                     firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                         var user = snapshot.val();
