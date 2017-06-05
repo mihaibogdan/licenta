@@ -32,7 +32,7 @@ var payload = {
 
 
 module.exports = function() {
-    exports.receivedMessage = function(event) {
+    function receivedMessage(event) {
         var senderID = event.sender.id;
 
         var message = event.message;
@@ -58,7 +58,7 @@ module.exports = function() {
         } else if (messageAttachments) {
             communication_service.sendTextMessage(senderID, "Message with attachment received");
         }
-    };
+    }
 
     function getNote(userID) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
@@ -89,7 +89,7 @@ module.exports = function() {
         communication_service.callSendAPI(messageData);
     }
 
-    exports.login = function(username, password) {
+    function login(username, password) {
         return new Promise(function(resolve, reject) {
             payload['ctl00$mainCopy$Login1$UserName'] = username;
             payload['ctl00$mainCopy$Login1$Password'] = password;
@@ -121,7 +121,11 @@ module.exports = function() {
 
             });
         })
+    }
+
+    return {
+        login: login,
+        handleMessage: receivedMessage
     };
-    
-    return exports;
+
 }

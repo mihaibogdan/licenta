@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var fb_bot_service = require('../services/facebook_bot_service');
+var fb_bot_service = require('../services/facebook_bot_service')();
 
 router.get('/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === 'esims_bot_verify_token') {
