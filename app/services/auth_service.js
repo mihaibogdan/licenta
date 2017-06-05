@@ -59,11 +59,10 @@ module.exports = {
                     firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                         var user = snapshot.val();
                         if (!user) {
-                            templates_service.sendLoginButton(userID);
+                            communication_service.sendLoginButton(userID);
                             reject();
                         } else {
-                            jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload, decodedHeader) {
-                                console.log('decodedPayload', decodedPayload);
+                            jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload) {
                                 module.exports.login(decodedPayload.username, decodedPayload.password).then(function() {
                                     resolve();
                                 })
@@ -103,8 +102,6 @@ module.exports = {
                         console.error('error posting json: ', err);
                         reject();
                     }
-
-                    console.log('login', body);
                     resolve();
                 })
 
