@@ -3,8 +3,35 @@ var Promise = require('promise');
 var cheerio = require('cheerio');
 var jwt = require('json-web-token');
 
+var _ = require('lodash');
+
 var firebase = require('../lib/firebase');
 var templates_service = require('./templates_service');
+
+
+var hiddenInputs = [
+    '__VIEWSTATE',
+    '__VIEWSTATEGENERATOR',
+    '__EVENTVALIDATION'
+];
+
+var payload = {
+    '__WPPS': 's',
+    '__LASTFOCUS': '',
+    'ctl00_mainCopy_ScriptManager1_HiddenField': '',
+    '__EVENTTARGET': '',
+    '__EVENTARGUMENT': '',
+    'ctl00_subnavTreeview_ExpandState': '',
+    'ctl00_subnavTreeview_SelectedNode': '',
+    'ctl00_subnavTreeview_PopulateLog': '',
+    '__VIEWSTATE': '',
+    '__VIEWSTATEGENERATOR': '',
+    '__EVENTVALIDATION': '',
+    'ctl00$mainCopy$Login1$UserName': '',
+    'ctl00$mainCopy$Login1$Password': '',
+    'ctl00$mainCopy$Login1$LoginButton': 'Conectare'
+};
+
 
 module.exports = {
     verifyIfLoggedIn: function () {

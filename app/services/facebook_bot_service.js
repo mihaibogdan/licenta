@@ -1,7 +1,5 @@
 var request = require('request');
 var cheerio = require('cheerio');
-var Promise = require('promise');
-var _ = require('lodash');
 
 var templates_service = require('./templates_service');
 var communication_service = require('./communication_service');
@@ -10,29 +8,6 @@ var firebase = require('../lib/firebase');
 
 
 request = request.defaults({jar: true});
-
-var hiddenInputs = [
-    '__VIEWSTATE',
-    '__VIEWSTATEGENERATOR',
-    '__EVENTVALIDATION'
-];
-
-var payload = {
-    '__WPPS': 's',
-    '__LASTFOCUS': '',
-    'ctl00_mainCopy_ScriptManager1_HiddenField': '',
-    '__EVENTTARGET': '',
-    '__EVENTARGUMENT': '',
-    'ctl00_subnavTreeview_ExpandState': '',
-    'ctl00_subnavTreeview_SelectedNode': '',
-    'ctl00_subnavTreeview_PopulateLog': '',
-    '__VIEWSTATE': '',
-    '__VIEWSTATEGENERATOR': '',
-    '__EVENTVALIDATION': '',
-    'ctl00$mainCopy$Login1$UserName': '',
-    'ctl00$mainCopy$Login1$Password': '',
-    'ctl00$mainCopy$Login1$LoginButton': 'Conectare'
-};
 
 
 module.exports = function() {
@@ -67,6 +42,7 @@ module.exports = function() {
     function startScrappingNotes(userID) {
         auth_service.keepConnectionAlive(userID)
             .then(function() {
+                console.log('scrapeNotes');
                 scrapeNotes(userID);
             })
             .catch(function(err) {
