@@ -4,6 +4,10 @@ var bodyParser = require('body-parser');
 var facebook_bot = require('./app/routes/facebook_bot');
 var esims = require('./app/routes/esims');
 
+var jwt = require('json-web-token');
+var payload = { foo: 'bar' };
+var secret = process.env.JWT_SECRET;
+
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -14,7 +18,16 @@ app.get('/static/index.html', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-	res.send('Hello world!');
+    console.log(process.env.JWT_SECRET);
+    console.log(process.env.PAGE_ACCESS_TOKEN);
+    jwt.encode(secret, payload, function (err, token) {
+        if (err) {
+            console.error(err.name, err.message);
+        } else {
+            res.send(token);
+        }
+    });
+
 });
 
 app.use('/facebook_bot', facebook_bot);
