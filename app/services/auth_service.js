@@ -8,8 +8,6 @@ var _ = require('lodash');
 var firebase = require('../lib/firebase');
 var communication_service = require('./communication_service');
 
-request = request.defaults({jar: true});
-
 var hiddenInputs = [
     '__VIEWSTATE',
     '__VIEWSTATEGENERATOR',
@@ -52,7 +50,7 @@ module.exports = {
             })
         })
     },
-    keepConnectionAlive: function (userID) {
+    keepConnectionAlive: function (userID, request) {
         return new Promise(function(resolve, reject) {
             module.exports.verifyIfLoggedIn().then(function(loggedIn) {
                 if (!loggedIn) {
@@ -63,7 +61,7 @@ module.exports = {
                             reject();
                         } else {
                             jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload) {
-                                module.exports.login(decodedPayload.username, decodedPayload.password).then(function() {
+                                module.exports.login(decodedPayload.username, decodedPayload.password, request).then(function() {
                                     resolve();
                                 })
                             });
@@ -76,7 +74,7 @@ module.exports = {
             })
         })
     },
-    login: function(username, password) {
+    login: function(username, password, request) {
         return new Promise(function(resolve, reject) {
             payload['ctl00$mainCopy$Login1$UserName'] = username;
             payload['ctl00$mainCopy$Login1$Password'] = password;

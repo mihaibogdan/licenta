@@ -6,9 +6,7 @@ var communication_service = require('./communication_service');
 var auth_service = require('./auth_service');
 var firebase = require('../lib/firebase');
 
-
-
-
+request = request.defaults({jar: true});
 
 module.exports = function() {
     function receivedMessage(event) {
@@ -40,7 +38,7 @@ module.exports = function() {
     }
 
     function startScrappingNotes(userID) {
-        auth_service.keepConnectionAlive(userID)
+        auth_service.keepConnectionAlive(userID, request)
             .then(function() {
                 scrapeNotes(userID);
             })
