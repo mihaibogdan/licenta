@@ -1,5 +1,5 @@
 var request = require('request');
-var PAGE_ACCESS_TOKEN = 'EAAGHOUlg6hYBACbz4EgqOvhP9i17OyHfeZCc2pOyZCqFtSGsOnH54EVH23rW4WErIzXibpyHdrWhCclFivmfZAsXZCQwsdbL5xg1hvk1SQG0zUuK3FFYEbVhBbZBqhEjDgTPStSZBc8iGbhIi9Sh2mBnjjxDM5euhfgxbx1V2LMQZDZD';
+var PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
 
 module.exports = {
