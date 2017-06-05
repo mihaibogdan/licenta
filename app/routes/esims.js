@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-var facebook_bot_service = require('../services/facebook_bot_service');
+var facebook_bot_service = require('../services/facebook_bot_service')();
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
