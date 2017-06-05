@@ -7,7 +7,7 @@ var auth_service = require('./auth_service');
 var firebase = require('../lib/firebase');
 
 
-request = request.defaults({jar: true});
+
 
 
 module.exports = function() {

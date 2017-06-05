@@ -8,6 +8,7 @@ var _ = require('lodash');
 var firebase = require('../lib/firebase');
 var communication_service = require('./communication_service');
 
+request = request.defaults({jar: true});
 
 var hiddenInputs = [
     '__VIEWSTATE',
