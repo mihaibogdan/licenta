@@ -15,7 +15,7 @@ router.post('/login', urlencodedParser, function (req, res) {
 
         facebook_bot_service.login(username, password).then(function () {
             var payload = { username: username, password: password };
-            var secret = process.env.JWT_SECRET;
+            var secret = new Buffer(process.env.JWT_SECRET).toString('base64');
 
             jwt.encode(secret, payload, 'HS384', function (err, token) {
                 if (err) {
