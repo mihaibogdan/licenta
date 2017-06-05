@@ -48,10 +48,10 @@ module.exports = function() {
 
             switch (messageText) {
                 case 'login':
-                    sendLoginButton(senderID);
+                    communication_service.sendLoginButton(senderID);
                     break;
                 case 'logout':
-                    sendLogoutButton(senderID);
+                    communication_service.sendLogoutButton(senderID);
                     break;
                 case 'note':
                     startScrappingNotes(senderID);
@@ -92,16 +92,7 @@ module.exports = function() {
         });
     }
 
-    function sendLoginButton(userID) {
-        var messageData = templates_service.loginButton(userID);
 
-        communication_service.callSendAPI(messageData);
-    }
-
-    function sendLogoutButton(userID) {
-        var messageData = templates_service.logoutButton(userID);
-        communication_service.callSendAPI(messageData);
-    }
 
     return {
         handleMessage: receivedMessage

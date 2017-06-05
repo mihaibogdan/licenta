@@ -4,8 +4,7 @@ var cheerio = require('cheerio');
 var jwt = require('json-web-token');
 
 var firebase = require('../lib/firebase');
-
-var PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+var templates_service = require('./templates_service');
 
 module.exports = {
     verifyIfLoggedIn: function () {
@@ -27,12 +26,13 @@ module.exports = {
     keepConnectionAlive: function (userID) {
         return new Promise(function(resolve, reject) {
             module.exports.verifyIfLoggedIn().then(function(loggedIn) {
+                console.log(loggedIn, 'loggedIn')
                 if (!loggedIn) {
                     firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                         var user = snapshot.val();
 
                         if (!user) {
-                            sendLoginButton(userID)
+                            templates_service.sendLoginButton(userID);
                             reject();
                         } else {
                             jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload, decodedHeader) {

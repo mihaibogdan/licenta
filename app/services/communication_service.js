@@ -1,6 +1,7 @@
 var request = require('request');
 var PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
+var templates_service = require('./templates_service');
 
 module.exports = {
     sendTextMessage: function(recipientId, messageText) {
@@ -35,5 +36,14 @@ module.exports = {
                 console.error(error);
             }
         });
+    },
+    sendLoginButton: function(userID) {
+        var messageData = templates_service.loginButton(userID);
+        module.exports.callSendAPI(messageData);
+    },
+
+    sendLogoutButton: function(userID) {
+        var messageData = templates_service.logoutButton(userID);
+        module.exports.callSendAPI(messageData);
     }
 };
