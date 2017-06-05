@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var jwt = require('json-web-token');
 
 var facebook_bot_service = require('../services/facebook_bot_service')();
+var auth_service = require('../services/auth_service');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -13,7 +14,7 @@ router.post('/login', urlencodedParser, function (req, res) {
         var password = req.body['ctl00$mainCopy$Login1$Password'];
         var redirect_uri = req.body['redirect_uri'];
 
-        facebook_bot_service.login(username, password).then(function () {
+        auth_service.login(username, password).then(function () {
             var payload = { username: username, password: password };
             var secret = new Buffer(process.env.JWT_SECRET).toString('base64');
 
