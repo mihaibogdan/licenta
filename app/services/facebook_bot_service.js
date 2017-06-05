@@ -5,6 +5,7 @@ var _ = require('lodash');
 
 var templates_service = require('./templates_service');
 var communication_service = require('./communication_service');
+var firebase = require('../lib/firebase');
 
 request = request.defaults({jar: true});
 
@@ -51,7 +52,7 @@ module.exports = function() {
                     sendLogoutButton(senderID);
                     break;
                 case 'note':
-                    getNote(senderID);
+                    startScrappingNotes(senderID);
                     break;
                 default:
                     communication_service.sendTextMessage(senderID, messageText);
@@ -61,7 +62,30 @@ module.exports = function() {
         }
     }
 
-    function getNote(userID) {
+    function startScrappingNotes(userID) {
+        verifyIfLoggedIn().then(function(loggedIn) {
+            if (!loggedIn) {
+                firebase.database.ref('users/' + userID).once('value', function(snapshot) {
+                    var user = snapshot.val();
+
+                    if (!user) {
+                        communication_service.sendTextMessage(userID, 'Please type "login" first');
+                        return ;
+                    }
+
+                    jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload, decodedHeader) {
+                        login(decodedPayload.username, decodedPayload.password).then(function() {
+                            scrapeNotes(userID);
+                        })
+                    });
+                })
+            } else {
+                scrapeNotes(userID)
+            }
+        });
+    }
+
+    function scrapeNotes(userID) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         request(url, function(err, resp, body) {
             if (err)
@@ -77,6 +101,23 @@ module.exports = function() {
             }
 
         });
+    }
+
+    function verifyIfLoggedIn() {
+        return new Promise(function(resolve, reject) {
+            var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
+            request(url, function(err, resp, body) {
+                if (err)
+                    throw err;
+                $ = cheerio.load(body);
+
+                if ($('#ctl00_mainCopy_Login1_UserName')) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            })
+        })
     }
 
     function sendLoginButton(userID) {
