@@ -18,13 +18,21 @@ app.get('/static/index.html', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-    console.log(process.env.JWT_SECRET);
-    console.log(process.env.PAGE_ACCESS_TOKEN);
     jwt.encode(secret, payload, function (err, token) {
         if (err) {
             console.error(err.name, err.message);
         } else {
-            res.send(token);
+
+
+            // decode
+            jwt.decode(secret + 'adasda', token, function (err_, decodedPayload, decodedHeader) {
+                if (err) {
+                    console.error(err.name, err.message);
+                } else {
+                    console.log(decodedPayload, decodedHeader);
+                    res.send(token);
+                }
+            });
         }
     });
 
