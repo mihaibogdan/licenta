@@ -114,9 +114,9 @@ module.exports = function() {
                 $ = cheerio.load(body);
 
                 if ($('#ctl00_mainCopy_Login1_UserName')) {
-                    resolve(true);
-                } else {
                     resolve(false);
+                } else {
+                    resolve(true);
                 }
             })
         })
