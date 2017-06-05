@@ -64,9 +64,11 @@ module.exports = function() {
 
     function startScrappingNotes(userID) {
         verifyIfLoggedIn().then(function(loggedIn) {
+            console.log('verifyIfLoggedIn ok');
             if (!loggedIn) {
                 firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                     var user = snapshot.val();
+                    console.log('user', user);
 
                     if (!user) {
                         communication_service.sendTextMessage(userID, 'Please type "login" first');
