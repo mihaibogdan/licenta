@@ -26,11 +26,11 @@ router.post('/webhook', function (req, res) {
                 } else if (event.account_linking) {
                     if (event.account_linking.status === 'linked') {
                         var newUser = {};
-                        newUser[event.sender_id] = event.account_linking.authorization_code;
+                        newUser[event.sender.id] = event.account_linking.authorization_code;
 
                         firebase.database.ref('users').set(newUser);
                     } else {
-                        firebase.database.ref('users').child(event.sender_id).remove();
+                        firebase.database.ref('users').child(event.sender.id).remove();
                     }
                 } else {
                     console.log("Webhook received unknown event: ", event);
