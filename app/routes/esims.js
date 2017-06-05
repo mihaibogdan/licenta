@@ -17,7 +17,7 @@ router.post('/login', urlencodedParser, function (req, res) {
             var payload = { username: username, password: password };
             var secret = process.env.JWT_SECRET;
 
-            jwt.encode(secret, payload, function (err, token) {
+            jwt.encode(secret, payload, 'HS384', function (err, token) {
                 if (err) {
                     console.error(err.name, err.message);
                 } else {
