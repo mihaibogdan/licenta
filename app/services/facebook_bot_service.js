@@ -55,9 +55,12 @@ module.exports = function() {
         request(url, function(err, resp, body) {
             if (err)
                 throw err;
-            $ = cheerio.load(body);
+            var $ = cheerio.load(body);
+
 
             var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
+
+            console.log('discipline', discipline);
 
             for(var i = 0; i < discipline.length; i++) {
                 if (i > 0) {
