@@ -25,7 +25,7 @@ module.exports = {
         return message;
     },
 
-    logoutButton: function(userId) {
+    logoutButton: function(userID) {
         var message = {
             "recipient": {
                 "id": userID
