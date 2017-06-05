@@ -6,6 +6,7 @@ var _ = require('lodash');
 var templates_service = require('./templates_service');
 var communication_service = require('./communication_service');
 var firebase = require('../lib/firebase');
+var jwt = require('json-web-token');
 
 request = request.defaults({jar: true});
 
