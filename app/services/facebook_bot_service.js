@@ -1,6 +1,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var Promise = require('promise');
+var _ = require('lodash');
 
 var templates_service = require('./templates_service');
 var communication_service = require('./communication_service');
