@@ -6,7 +6,7 @@ var jwt = require('json-web-token');
 var _ = require('lodash');
 
 var firebase = require('../lib/firebase');
-var templates_service = require('./templates_service');
+var communication_service = require('./communication_service');
 
 
 var hiddenInputs = [
@@ -56,7 +56,7 @@ module.exports = {
             firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                 var user = snapshot.val();
                 if (!user) {
-                    templates_service.sendLoginButton(userID);
+                    communication_service.sendLoginButton(userID);
                     reject();
                 } else {
                     jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload, decodedHeader) {
