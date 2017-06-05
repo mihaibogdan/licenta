@@ -92,11 +92,11 @@ module.exports = {
             payload['ctl00$mainCopy$Login1$UserName'] = username;
             payload['ctl00$mainCopy$Login1$Password'] = password;
 
-            var url = 'http://simsweb.uaic.ro/eSIMS/MyLogin.aspx?ReturnUrl=%2feSIMS%2fdefault.aspx';
+            var url = 'http://simsweb.uaic.ro/eSIMS/MyLogin.aspx';
             request(url, function(err, resp, body) {
                 if (err)
                     throw err;
-                $ = cheerio.load(body);
+                var $ = cheerio.load(body);
 
                 _.forEach(hiddenInputs, function (input) {
                     payload[input] = $('#' + input).val();
