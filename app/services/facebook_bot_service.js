@@ -55,12 +55,10 @@ module.exports = function() {
             if (err)
                 throw err;
             var $ = cheerio.load(body);
-            console.log('scrapeNotes', body);
 
 
             var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
 
-            console.log('discipline', discipline);
 
             for(var i = 0; i < discipline.length; i++) {
                 if (i > 0) {
