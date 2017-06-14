@@ -21,7 +21,7 @@ var payloadsGrades = {
 
 var regularExpressions = [
     {
-        regExp: /(note( +)an( +)\d( +)semestru(l?)( +)\d)/g,
+        regExp: /(note( +)an( +)\d( +)(,?)semestru(l?)( +)\d)/g,
         means: 'note_semestru'
     },
     {
@@ -67,7 +67,6 @@ module.exports = function() {
             match = lowerCaseMessage.match(regularExpressions[i].regExp);
             if (match) {
                 params = lowerCaseMessage.match(/\d/g);
-                console.log('params', params);
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
                 return ;
             }
@@ -127,21 +126,37 @@ module.exports = function() {
     }
 
     function scrapeMarks(senderID, year, semesters) {
-        var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-        var options;
-        var marks = [];
-
-        console.log('semesters', semesters);
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
-            payloadsGrades.__EVENTARGUMENT = 'Select$' + semester;
-            options  = {
-                method: 'post',
-                form: payloadsGrades,
-                url: url
-            };
 
             communication_service.sendTextMessage(senderID, '-------An ' + year + ', semestrul ' + ((semester % 2) + 1) + '-------');
 
+            getMarks(semester).then(function(marks) {
+                async.eachSeries(marks, function markIteree(mark, markCallback) {
+                    communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
+                        markCallback(null);
+                    }));
+                }, function done() {
+                    semesterCallback(null);
+                });
+
+            })
+        }, function done() {
+            //...
+        });
+
+    }
+
+    function getMarks(semester) {
+        var marks = [];
+        var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
+        var options = {
+            method: 'post',
+            form: payloadsGrades,
+            url: url
+        };
+        payloadsGrades.__EVENTARGUMENT = 'Select$' + semester;
+
+        return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
                 if (err)
                     throw err;
@@ -157,26 +172,10 @@ module.exports = function() {
                     }
                 }
 
-                async.eachSeries(marks, function markIteree(mark, markCallback) {
-                    communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
-                        console.log('mark', mark);
-                        markCallback(null);
-                    }));
-                }, function done() {
-                    marks = [];
-                    semesterCallback(null);
-                });
+                resolve(marks);
             });
-
-
-
-        }, function done() {
-            //...
-        });
-
+        })
     }
-
-
 
     return {
         matchMessage: matchMessage
