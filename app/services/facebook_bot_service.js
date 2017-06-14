@@ -113,17 +113,17 @@ module.exports = function() {
                     if (validateYear(year)) {
                         auth_service.keepConnectionAlive(senderID, request)
                             .then(function () {
-                                showDebts(senderID, [0, 1, 2, 3, 4, 5]);
+                                showDebts(senderID, [(year * 2) - 2, (year * 2) - 1]);
                             });
                     } else {
                         communication_service.sendTextMessage(senderID, errors.semester);
                     }
                     break;
                 case 'restante':
-                    var year = parseInt(params[0]);
                     auth_service.keepConnectionAlive(senderID, request)
                         .then(function() {
-                            showDebts(senderID, [(year * 2) - 2, (year * 2) - 1]);
+
+                            showDebts(senderID, [0, 1, 2, 3, 4, 5]);
                         });
                     break;
                 default:
