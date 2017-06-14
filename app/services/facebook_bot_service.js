@@ -143,11 +143,13 @@ module.exports = function() {
     }
 
     function showDebts(senderID, semesters) {
+        var restante = 0;
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
 
             getMarks(semester).then(function(marks) {
                 for (var i = 0; i < marks.length; i++) {
                     if (parseInt(marks[i].value) < 5 ) {
+                        restante++;
                         communication_service.sendTextMessage(senderID, marks[i].name + ' ' + marks[i].value);
                     }
                 }
@@ -157,7 +159,9 @@ module.exports = function() {
 
 
         }, function done() {
-            //...
+            if (!restante) {
+                communication_service.sendTextMessage('Nu ai nicio restanta');
+            }
         });
     }
 
