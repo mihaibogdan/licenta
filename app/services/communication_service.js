@@ -6,16 +6,21 @@ var templates_service = require('./templates_service');
 
 module.exports = {
     sendTextMessage: function(recipientId, messageText) {
-        var messageData = {
-            recipient: {
-                id: recipientId
-            },
-            message: {
-                text: messageText
-            }
-        };
+        return new Promise(function(resolve, reject) {
+            var messageData = {
+                recipient: {
+                    id: recipientId
+                },
+                message: {
+                    text: messageText
+                }
+            };
 
-        module.exports.callSendAPI(messageData);
+            module.exports.callSendAPI(messageData).then(function() {
+                resolve();
+            });
+        })
+
     },
     callSendAPI: function(messageData) {
         return new Promise(function(resolve, reject) {
