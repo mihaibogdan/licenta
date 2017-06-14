@@ -20,31 +20,32 @@ var payloadsGrades = {
 };
 
 var regularExpressions = [
-        {
-            regExp: /(note( +)an( +)\d)/g,
-            means: 'note_an'
-        },
-        {
-            regExp: /(note( +)an( +)\d( +)semestru(l?)( +)\d)/g,
-            means: 'note_semestru'
-        },
-        {
-            regExp: /(restante( +)an( +)\d)/g,
-            means: 'restante_an'
-        },
-        {
-            regExp: /(restante)/g,
-            means: 'restante'
-        },
-        {
-            regExp: /(login)/g,
-            means: 'login'
-        },
-        {
-            regExp: /(logout)/g,
-            means: 'logout'
-        }
-    ];
+    {
+        regExp: /(note( +)an( +)\d( +)semestru(l?)( +)\d)/g,
+        means: 'note_semestru'
+    },
+    {
+        regExp: /(note( +)an( +)\d)/g,
+        means: 'note_an'
+    },
+
+    {
+        regExp: /(restante( +)an( +)\d)/g,
+        means: 'restante_an'
+    },
+    {
+        regExp: /(restante)/g,
+        means: 'restante'
+    },
+    {
+        regExp: /(login)/g,
+        means: 'login'
+    },
+    {
+        regExp: /(logout)/g,
+        means: 'logout'
+    }
+];
 
 var errors = {
     year: 'Anul ar trebui sa fie 1, 2 sau 3',
