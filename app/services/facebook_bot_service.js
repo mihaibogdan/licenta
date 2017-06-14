@@ -119,9 +119,11 @@ module.exports = function() {
                 form: payloadsGrades,
                 url: url
             };
+            console.log('semester', semester);
+
 
             communication_service.sendTextMessage(senderID, 'An ' + year + ', semestrul ' + ((semesters[i] % 2) + 1));
-            
+
             request(options, function(err, resp, body) {
                 if (err)
                     throw err;
@@ -138,8 +140,11 @@ module.exports = function() {
                 }
             });
 
+            console.log('marks', marks);
+
             async.eachSeries(marks, function markIteree(mark, markCallback) {
                 communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
+                    console.log('mark', mark);
                     markCallback(null);
                 }));
             }, function done() {
