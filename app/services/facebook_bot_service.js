@@ -108,7 +108,24 @@ module.exports = function() {
                         communication_service.sendTextMessage(senderID, errors.year);
                     }
                     break;
-
+                case 'restante_an':
+                    var year = parseInt(params[0]);
+                    if (validateYear(year)) {
+                        auth_service.keepConnectionAlive(senderID, request)
+                            .then(function () {
+                                showDebts(senderID, [0, 1, 2, 3, 4, 5]);
+                            });
+                    } else {
+                        communication_service.sendTextMessage(senderID, errors.semester);
+                    }
+                    break;
+                case 'restante':
+                    var year = parseInt(params[0]);
+                    auth_service.keepConnectionAlive(senderID, request)
+                        .then(function() {
+                            showDebts(senderID, [(year * 2) - 2, (year * 2) - 1]);
+                        });
+                    break;
                 default:
                     communication_service.sendTextMessage(senderID, message);
             }
@@ -123,6 +140,25 @@ module.exports = function() {
 
     function validateSemester(semester) {
         return semester >= 1 && semester <= 2;
+    }
+
+    function showDebts(senderID, semesters) {
+        async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
+
+            getMarks(semester).then(function(marks) {
+                for (var i = 0; i < marks.length; i++) {
+                    if (parseInt(marks[i].value) < 5 ) {
+                        communication_service.sendTextMessage(senderID, marks[i].name + ' ' + marks[i].value);
+                    }
+                }
+
+                semesterCallback(null);
+            })
+
+
+        }, function done() {
+            //...
+        });
     }
 
     function scrapeMarks(senderID, year, semesters) {
