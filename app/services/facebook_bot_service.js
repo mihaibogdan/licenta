@@ -67,6 +67,7 @@ module.exports = function() {
             match = lowerCaseMessage.match(regularExpressions[i].regExp);
             if (match) {
                 params = lowerCaseMessage.match(/\d/g);
+                console.log('params', params);
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
                 return ;
             }
@@ -130,6 +131,7 @@ module.exports = function() {
         var options;
         var marks = [];
 
+        console.log('semesters', semesters);
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
             payloadsGrades.__EVENTARGUMENT = 'Select$' + semester;
             options  = {
