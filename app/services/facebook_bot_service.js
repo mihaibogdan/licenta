@@ -92,7 +92,7 @@ module.exports = function() {
                     if (validateYear(year) && validateSemester(semester)) {
                         auth_service.keepConnectionAlive(senderID, request)
                             .then(function() {
-                                scrapeMarks(senderID, year, [(year - 1) + (semester - 1)]);
+                                scrapeMarks(senderID, year, [(year - 1) * 2 + (semester - 1)]);
                             })
                     } else {
                         communication_service.sendTextMessage(senderID, errors.semester);
