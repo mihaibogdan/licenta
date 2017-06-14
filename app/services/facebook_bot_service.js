@@ -160,7 +160,7 @@ module.exports = function() {
 
         }, function done() {
             if (!restante) {
-                communication_service.sendTextMessage(senderID, 'Nu ai nicio restanta');
+                communication_service.sendTextMessage(senderID, 'Nu ai nicio restanta!');
             }
         });
     }
