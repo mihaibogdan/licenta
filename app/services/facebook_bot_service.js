@@ -45,6 +45,11 @@ var regularExpressions = [
         }
     ];
 
+var errors = {
+    year: 'Anul ar trebui sa fie intre 1, 2 sau 3',
+    semester: 'Semestrul ar trebuie sa fie 1 sau 2'
+};
+
 module.exports = function() {
     function matchMessage(event) {
         var senderID = event.sender.id;
@@ -59,10 +64,11 @@ module.exports = function() {
             var params = lowerCaseMessage.match(regularExpressions[i].regExp);
             if (params) {
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
+                return ;
             }
-
         }
 
+        // send default message
     }
 
     function handleMessage (message, meaning, params, senderID, messageAttachments) {
@@ -75,8 +81,16 @@ module.exports = function() {
                 case 'logout':
                     communication_service.sendLogoutButton(senderID);
                     break;
-                case 'note':
-                    startScrappingMarks(senderID);
+                case 'note_an':
+                    var year = params[0];
+                    if (validateYear(year)) {
+                        auth_service.keepConnectionAlive(senderID, request)
+                            .then(function() {
+                                scrapeMarks(senderID, year, [(year * 2) - 2, (year * 2) - 1]);
+                            })
+                    } else {
+                        communication_service.sendTextMessage(senderID, errors.year);
+                    }
                     break;
                 default:
                     communication_service.sendTextMessage(senderID, message);
@@ -86,39 +100,40 @@ module.exports = function() {
         }
     }
 
-    function startScrappingMarks(userID) {
-        auth_service.keepConnectionAlive(userID, request)
-            .then(function() {
-                scrapeMarks(userID);
-            }) 
-            .catch(function(err) {
-                console.log('keepConnectionAlive', err);
-            });
+    function validateYear(year) {
+        return year >= 1 && year <= 3;
     }
 
-    function scrapeMarks(userID) {
+    function scrapeMarks(senderID, year, semesters) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-        var options = {
-            method: 'post',
-            form: payloadsGrades,
-            url: url
-        };
-        request(options, function(err, resp, body) {
-            if (err)
-                throw err;
-            var $ = cheerio.load(body);
+        var options;
+
+        for (var i = 0; i < semesters.length; i++) {
+            payloadsGrades.__EVENTARGUMENT = 'Select$' + semesters[i];
+            options  = {
+                method: 'post',
+                form: payloadsGrades,
+                url: url
+            };
+            communication_service.sendTextMessage('An ' + year + ', semestrul ' + ((semesters[i] % 2) + 1));
+
+            request(options, function(err, resp, body) {
+                if (err)
+                    throw err;
+                var $ = cheerio.load(body);
 
 
-            var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
+                var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
 
 
-            for(var i = 0; i < discipline.length; i++) {
-                if (i > 0) {
-                    communication_service.sendTextMessage(userID, discipline[i].children[4].children[0].children[0].data + ' ' + discipline[i].children[5].children[0].children[0].data);
+                for(var i = 0; i < discipline.length; i++) {
+                    if (i > 0) {
+                        communication_service.sendTextMessage(senderID, discipline[i].children[4].children[0].children[0].data + ' ' + discipline[i].children[5].children[0].children[0].data);
+                    }
                 }
-            }
 
-        });
+            });
+        }
     }
 
 
