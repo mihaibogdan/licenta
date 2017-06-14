@@ -55,7 +55,7 @@ module.exports = function() {
         var messageAttachments = message.attachments;
 
         var lowerCaseMessage = messageText.toLowerCase();
-        for (var i = 0; i < regularExpressions.length, i++) {
+        for (var i = 0; i < regularExpressions.length; i++) {
             var params = lowerCaseMessage.match(regularExpressions[i].regExp);
             if (params) {
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
