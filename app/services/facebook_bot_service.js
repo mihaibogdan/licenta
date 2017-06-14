@@ -119,8 +119,6 @@ module.exports = function() {
                 form: payloadsGrades,
                 url: url
             };
-            console.log('semester', semester);
-
 
             communication_service.sendTextMessage(senderID, 'An ' + year + ', semestrul ' + ((semester % 2) + 1));
 
@@ -138,19 +136,19 @@ module.exports = function() {
                         marks.push({ name: discipline[i].children[4].children[0].children[0].data, value: discipline[i].children[5].children[0].children[0].data})
                     }
                 }
+
+                async.eachSeries(marks, function markIteree(mark, markCallback) {
+                    communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
+                        console.log('mark', mark);
+                        markCallback(null);
+                    }));
+                }, function done() {
+                    marks = [];
+                    semesterCallback(null);
+                });
             });
 
-            console.log('marks', marks);
 
-            async.eachSeries(marks, function markIteree(mark, markCallback) {
-                communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
-                    console.log('mark', mark);
-                    markCallback(null);
-                }));
-            }, function done() {
-                marks = [];
-                semesterCallback(null);
-            });
 
         }, function done() {
             //...
