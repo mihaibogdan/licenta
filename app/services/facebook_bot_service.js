@@ -122,7 +122,7 @@ module.exports = function() {
             console.log('semester', semester);
 
 
-            communication_service.sendTextMessage(senderID, 'An ' + year + ', semestrul ' + ((semesters[i] % 2) + 1));
+            communication_service.sendTextMessage(senderID, 'An ' + year + ', semestrul ' + ((semester % 2) + 1));
 
             request(options, function(err, resp, body) {
                 if (err)
