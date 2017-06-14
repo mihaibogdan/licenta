@@ -1,5 +1,6 @@
 var request = require('request');
 var cheerio = require('cheerio');
+var async = require('async');
 
 var templates_service = require('./templates_service');
 var communication_service = require('./communication_service');
@@ -109,16 +110,18 @@ module.exports = function() {
     function scrapeMarks(senderID, year, semesters) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         var options;
+        var marks = [];
 
-        for (var i = 0; i < semesters.length; i++) {
-            payloadsGrades.__EVENTARGUMENT = 'Select$' + semesters[i];
+        async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
+            payloadsGrades.__EVENTARGUMENT = 'Select$' + semester;
             options  = {
                 method: 'post',
                 form: payloadsGrades,
                 url: url
             };
-            communication_service.sendTextMessage('An ' + year + ', semestrul ' + ((semesters[i] % 2) + 1));
 
+            communication_service.sendTextMessage(senderID, 'An ' + year + ', semestrul ' + ((semesters[i] % 2) + 1));
+            
             request(options, function(err, resp, body) {
                 if (err)
                     throw err;
@@ -130,12 +133,24 @@ module.exports = function() {
 
                 for(var i = 0; i < discipline.length; i++) {
                     if (i > 0) {
-                        communication_service.sendTextMessage(senderID, discipline[i].children[4].children[0].children[0].data + ' ' + discipline[i].children[5].children[0].children[0].data);
+                        marks.push({ name: discipline[i].children[4].children[0].children[0].data, value: discipline[i].children[5].children[0].children[0].data})
                     }
                 }
-
             });
-        }
+
+            async.eachSeries(marks, function markIteree(mark, markCallback) {
+                communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
+                    markCallback(null);
+                }));
+            }, function done() {
+                marks = [];
+                semesterCallback(null);
+            });
+
+        }, function done() {
+            //...
+        });
+
     }
 
 
