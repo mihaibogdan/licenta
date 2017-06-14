@@ -64,6 +64,7 @@ module.exports = function() {
             var params = lowerCaseMessage.match(regularExpressions[i].regExp);
             if (params) {
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
+                console.log('params', params);
                 return ;
             }
         }
