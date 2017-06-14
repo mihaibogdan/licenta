@@ -18,8 +18,35 @@ var payloadsGrades = {
     '__EVENTVALIDATION': 'FF66razzv6taiNB2ld4UoR2NF46PsB/hccJSAdcAOTkpm4b0pYu/T6S/585A9+/1IsnAb4j/fKJaBcgm5f8PJLfwqVZF3aL0dLZ/YudGRCaJMFajBRxN2E8VvrFKjvR0+xdgszgtDuTAe7xwoTR6zpR+XGbkopPx5uDOm+pC6q4pjQEgrTzJJVOCKdgLVoRzI3sCG+RWGyLd6c5RiTNQBDpGVFbeNAvJAD9WzvzlggizBeWtZztS9+QmPbpPTQ+v+CJXkKnpjwv7Zp/Mcg9xOkbX/37U4THksreqmnDnN/b00w/p7JaKDa3MrlD9F7fvMWwb8bR8QgoapRJ8WTNAxtNaDaG3OJsAElgmMWQQ438R/bVOEEiDj6lFrFR4SUUOBysa1TIYTkn/d/f0FbxiB8lpSHWEzevuH/P6YzWSfdFHat6w5ZBoOOrv520Li7RRG49v3Alh5SAsWUut/c3pq1nBsvda1zTOpObq76i/xa2KgoZpB/851LmP14Eu099BebcYm5DwknvfOsXFf3ojnsGX2AvLEHx8YJ9bGuEpxyd3aBhrmlB6SK3YxCbWFEgRdZWTHGEQazHRvEwPtr5imrgXqirC/8kr3axt0XZSE7ZJDTrcEGyOUEnyk0FaRrHgqv1uX+qAfqy1NyQwnThvONUF2Vdt6hzQNJeIDiK1iBtJCAAM73D/NuTWJrLEsIIO2tfRrA==',
 };
 
+var regularExpressions = [
+        {
+            regExp: /(note( +)an( +)\d)/g,
+            means: 'note_an'
+        },
+        {
+            regExp: /(note( +)an( +)\d( +)semestru(l?)( +)\d)/g,
+            means: 'note_semestru'
+        },
+        {
+            regExp: /(restante( +)an( +)\d)/g,
+            means: 'restante_an'
+        },
+        {
+            regExp: /(restante)/g,
+            means: 'restante'
+        },
+        {
+            regExp: /(login)/g,
+            means: 'login'
+        },
+        {
+            regExp: /(logout)/g,
+            means: 'logout'
+        }
+    ];
+
 module.exports = function() {
-    function receivedMessage(event) {
+    function matchMessage(event) {
         var senderID = event.sender.id;
 
         var message = event.message;
@@ -27,9 +54,21 @@ module.exports = function() {
         var messageText = message.text;
         var messageAttachments = message.attachments;
 
-        if (messageText) {
+        var lowerCaseMessage = messageText.toLowerCase();
+        for (var i = 0; i < regularExpressions.length, i++) {
+            var params = lowerCaseMessage.match(regularExpressions[i].regExp);
+            if (params) {
+                handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
+            }
 
-            switch (messageText) {
+        }
+
+    }
+
+    function handleMessage (message, meaning, params, senderID, messageAttachments) {
+        if (meaning) {
+
+            switch (meaning) {
                 case 'login':
                     communication_service.sendLoginButton(senderID);
                     break;
@@ -37,27 +76,27 @@ module.exports = function() {
                     communication_service.sendLogoutButton(senderID);
                     break;
                 case 'note':
-                    startScrappingNotes(senderID);
+                    startScrappingMarks(senderID);
                     break;
                 default:
-                    communication_service.sendTextMessage(senderID, messageText);
+                    communication_service.sendTextMessage(senderID, message);
             }
         } else if (messageAttachments) {
             communication_service.sendTextMessage(senderID, "Message with attachment received");
         }
     }
 
-    function startScrappingNotes(userID) {
+    function startScrappingMarks(userID) {
         auth_service.keepConnectionAlive(userID, request)
             .then(function() {
-                scrapeNotes(userID);
+                scrapeMarks(userID);
             }) 
             .catch(function(err) {
                 console.log('keepConnectionAlive', err);
             });
     }
 
-    function scrapeNotes(userID) {
+    function scrapeMarks(userID) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         var options = {
             method: 'post',
@@ -85,7 +124,7 @@ module.exports = function() {
 
 
     return {
-        handleMessage: receivedMessage
+        matchMessage: matchMessage
     };
 
 }

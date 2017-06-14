@@ -22,7 +22,7 @@ router.post('/webhook', function (req, res) {
 
             entry.messaging.forEach(function(event) {
                 if (event.message) {
-                    fb_bot_service.handleMessage(event)
+                    fb_bot_service.matchMessage(event)
                 } else if (event.account_linking) {
                     if (event.account_linking.status === 'linked') {
                         var newUser = {};
