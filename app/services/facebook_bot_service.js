@@ -84,17 +84,6 @@ module.exports = function() {
                 case 'logout':
                     communication_service.sendLogoutButton(senderID);
                     break;
-                case 'note_an':
-                    var year = parseInt(params[0]);
-                    if (validateYear(year)) {
-                        auth_service.keepConnectionAlive(senderID, request)
-                            .then(function() {
-                                scrapeMarks(senderID, year, [(year * 2) - 2, (year * 2) - 1]);
-                            })
-                    } else {
-                        communication_service.sendTextMessage(senderID, errors.year);
-                    }
-                    break;
                 case 'note_semestru':
                     var year = parseInt(params[0]);
                     var semester = parseInt(params[1]);
@@ -107,6 +96,18 @@ module.exports = function() {
                         communication_service.sendTextMessage(senderID, errors.semester);
                     }
                     break;
+                case 'note_an':
+                    var year = parseInt(params[0]);
+                    if (validateYear(year)) {
+                        auth_service.keepConnectionAlive(senderID, request)
+                            .then(function() {
+                                scrapeMarks(senderID, year, [(year * 2) - 2, (year * 2) - 1]);
+                            })
+                    } else {
+                        communication_service.sendTextMessage(senderID, errors.year);
+                    }
+                    break;
+
                 default:
                     communication_service.sendTextMessage(senderID, message);
             }
