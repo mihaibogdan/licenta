@@ -60,11 +60,12 @@ module.exports = function() {
         var messageAttachments = message.attachments;
 
         var lowerCaseMessage = messageText.toLowerCase();
+        var match, params;
         for (var i = 0; i < regularExpressions.length; i++) {
-            var params = lowerCaseMessage.match(regularExpressions[i].regExp);
-            if (params) {
+            match = lowerCaseMessage.match(regularExpressions[i].regExp);
+            if (match) {
+                params = lowerCaseMessage.match(/\d/g);
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
-                console.log('params', params);
                 return ;
             }
         }
