@@ -48,7 +48,7 @@ var regularExpressions = [
 
 var errors = {
     year: 'Anul ar trebui sa fie 1, 2 sau 3',
-    semester: 'Semestrul ar trebuie sa fie 1 sau 2'
+    semester: 'Anul ar trebui sa fie 1, 2 sau 3 iar semestrul ar trebuie sa fie 1 sau 2'
 };
 
 module.exports = function() {
@@ -95,6 +95,18 @@ module.exports = function() {
                         communication_service.sendTextMessage(senderID, errors.year);
                     }
                     break;
+                case 'note_semestru':
+                    var year = parseInt(params[0]);
+                    var semester = parseInt(params[1]);
+                    if (validateYear(year) && validateSemester(semester)) {
+                        auth_service.keepConnectionAlive(senderID, request)
+                            .then(function() {
+                                scrapeMarks(senderID, year, [(year - 1) + (semester - 1)]);
+                            })
+                    } else {
+                        communication_service.sendTextMessage(senderID, errors.semester);
+                    }
+                    break;
                 default:
                     communication_service.sendTextMessage(senderID, message);
             }
@@ -105,6 +117,10 @@ module.exports = function() {
 
     function validateYear(year) {
         return year >= 1 && year <= 3;
+    }
+
+    function validateSemester(semester) {
+        return semester >= 1 && semester <= 2;
     }
 
     function scrapeMarks(senderID, year, semesters) {
@@ -120,7 +136,7 @@ module.exports = function() {
                 url: url
             };
 
-            communication_service.sendTextMessage(senderID, 'An ' + year + ', semestrul ' + ((semester % 2) + 1));
+            communication_service.sendTextMessage(senderID, '-------An ' + year + ', semestrul ' + ((semester % 2) + 1) + '-------');
 
             request(options, function(err, resp, body) {
                 if (err)
