@@ -21,7 +21,7 @@ var payloadsGrades = {
 
 var regularExpressions = [
     {
-        regExp: /(note( +)an( +)\d( +)(,?)semestru(l?)( +)\d)/g,
+        regExp: /(note( +)an( +)\d( +)( *)(,?)( *)semestru(l?)( +)\d)/g,
         means: 'note_semestru'
     },
     {
