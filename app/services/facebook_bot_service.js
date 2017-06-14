@@ -46,7 +46,7 @@ var regularExpressions = [
     ];
 
 var errors = {
-    year: 'Anul ar trebui sa fie intre 1, 2 sau 3',
+    year: 'Anul ar trebui sa fie 1, 2 sau 3',
     semester: 'Semestrul ar trebuie sa fie 1 sau 2'
 };
 
@@ -82,7 +82,7 @@ module.exports = function() {
                     communication_service.sendLogoutButton(senderID);
                     break;
                 case 'note_an':
-                    var year = params[0];
+                    var year = parseInt(params[0]);
                     if (validateYear(year)) {
                         auth_service.keepConnectionAlive(senderID, request)
                             .then(function() {
