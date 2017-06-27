@@ -20,6 +20,7 @@ app.get('/', function (req, res) {
 app.use('/facebook_bot', facebook_bot);
 app.use('/esims', esims);
 
+console.log('here');
 app.listen(process.env.PORT, function () {
   console.log('Example app listening on port 5000!');
 });
