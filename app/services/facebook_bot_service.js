@@ -28,7 +28,6 @@ var regularExpressions = [
         regExp: /(note( +)an( +)\d)/g,
         means: 'note_an'
     },
-
     {
         regExp: /(restante( +)an( +)\d)/g,
         means: 'restante_an'
@@ -36,6 +35,10 @@ var regularExpressions = [
     {
         regExp: /(restante)/g,
         means: 'restante'
+    },
+    {
+        regExp: /(taxe)/g,
+        means: 'taxe'
     },
     {
         regExp: /(login)/g,
@@ -122,10 +125,15 @@ module.exports = function() {
                 case 'restante':
                     auth_service.keepConnectionAlive(senderID, request)
                         .then(function() {
-
                             showDebts(senderID, [0, 1, 2, 3, 4, 5]);
                         });
                     break;
+                case 'taxe':
+                    auth_service.keepConnectionAlive(senderID, request)
+                        .then(function() {
+                            verifyTaxes();
+                        });
+
                 default:
                     communication_service.sendTextMessage(senderID, message);
             }
@@ -215,6 +223,37 @@ module.exports = function() {
                 resolve(marks);
             });
         })
+    }
+
+    function verifyTaxes() {
+        var marks = [];
+        var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
+        var options = {
+            method: 'post',
+            form: payloadsGrades,
+            url: url
+        };
+        payloadsGrades.__EVENTARGUMENT = 'Select$' + semester;
+
+        return new Promise(function(resolve, reject) {
+            request(options, function(err, resp, body) {
+                if (err)
+                    throw err;
+                var $ = cheerio.load(body);
+
+
+                var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp1896648950_wp1261240874_GridViewTaxe tr');
+
+                for(var i = 0; i < discipline.length; i++) {
+                    if (i > 0) {
+                        communication_service.sendTextMessage(senderID, discipline[i].children[1].children[0].children[0].data + ' ' + discipline[i].children[2].children[0].children[0].data);
+                    }
+                }
+
+                resolve(marks);
+            });
+        })
+        
     }
 
     return {
