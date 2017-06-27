@@ -129,12 +129,11 @@ module.exports = function() {
                         });
                     break;
                 case 'taxe':
-                    console.log('taxe');
                     auth_service.keepConnectionAlive(senderID, request)
                         .then(function() {
                             verifyTaxes();
                         });
-
+                    break;
                 default:
                     communication_service.sendTextMessage(senderID, message);
             }
@@ -234,7 +233,6 @@ module.exports = function() {
             form: payloadsGrades,
             url: url
         };
-        payloadsGrades.__EVENTARGUMENT = 'Select$' + semester;
 
         return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
