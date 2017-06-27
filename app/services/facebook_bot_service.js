@@ -129,6 +129,7 @@ module.exports = function() {
                         });
                     break;
                 case 'taxe':
+                    console.log('taxe');
                     auth_service.keepConnectionAlive(senderID, request)
                         .then(function() {
                             verifyTaxes();
