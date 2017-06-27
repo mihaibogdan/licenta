@@ -131,7 +131,7 @@ module.exports = function() {
                 case 'taxe':
                     auth_service.keepConnectionAlive(senderID, request)
                         .then(function() {
-                            verifyTaxes();
+                            verifyTaxes(senderID);
                         });
                     break;
                 default:
@@ -225,7 +225,7 @@ module.exports = function() {
         })
     }
 
-    function verifyTaxes() {
+    function verifyTaxes(senderID) {
         var marks = [];
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         var options = {
