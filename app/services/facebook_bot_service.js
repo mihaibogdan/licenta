@@ -233,6 +233,7 @@ module.exports = function() {
             form: payloadsGrades,
             url: url
         };
+        var atLeastOne = false;
 
         return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
@@ -245,11 +246,17 @@ module.exports = function() {
 
                 for(var i = 0; i < discipline.length; i++) {
                     if (i > 0) {
-                        communication_service.sendTextMessage(senderID, discipline[i].children[1].children[0].children[0].data + ' ' + discipline[i].children[2].children[0].children[0].data);
+                        if (!discipline[i].children[1].children[0].children[0].data) {
+                            communication_service.sendTextMessage(senderID, discipline[i].children[1].children[0].children[0].data + ' ' + discipline[i].children[2].children[0].children[0].data);
+                            atLeastOne = true;
+                        }
                     }
                 }
 
-                resolve(marks);
+                if (!atLeastOne) {
+                    communication_service.sendTextMessage(senderID, 'Nu ai de platit nicio taxa!');
+                }
+                 resolve();
             });
         })
         
