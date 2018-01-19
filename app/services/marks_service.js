@@ -30,10 +30,7 @@ module.exports = {
     getPayload: function() {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         return new Promise(function(resolve, reject) {
-            console.log('in get payload');
             request(url, function(err, resp, body) {
-                console.log('in request');
-
                 if (err)
                     throw err;
                 var $ = cheerio.load(body);
@@ -50,7 +47,6 @@ module.exports = {
     getMarks: function(semester, payload) {
         var marks = [];
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-        console.log(payload);
         payload.__EVENTARGUMENT = 'Select$' + semester;
         var options = {
             method: 'post',
