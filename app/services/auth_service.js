@@ -104,5 +104,12 @@ module.exports = {
 
             });
         })
+    },
+    getUser: function(userId) {
+        return new Promise(function (resolve) {
+            firebase.database.ref('/users/' + userId).once('value').then(function(snapshot) {
+                resolve(snapshot.val());
+            });
+        });
     }
 };

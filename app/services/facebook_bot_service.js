@@ -108,7 +108,18 @@ module.exports = function() {
                     communication_service.sendLogoutButton(senderID);
                     break;
                 case 'orar':
-                    communication_service.sendYearOptions(senderID);
+                    auth_service.keepConnectionAlive(senderID, request)
+                        .then(function() {
+                            auth_service.getUser(senderID).then(function (user) {
+                                console.log(user);
+                               if (!user.year) {
+                                   communication_service.sendYearOptions(senderID);
+                               } else {
+                                   console.log('are deja date');
+                               }
+                            });
+
+                        });
                     break;
                 case 'note_semestru':
                     var year = parseInt(params[0]);

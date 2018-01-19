@@ -9,9 +9,6 @@ var communication_service = require('./communication_service');
 
 module.exports = {
     getScheduleForCurrentUser: function(userId) {
-        firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
-            console.log(snapshot.val());
-        });
 
     }
 };
