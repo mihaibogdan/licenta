@@ -26,16 +26,18 @@ var payloadsGrades = {
 module.exports = {
     getPayload: function() {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-        request(url, function(err, resp, body) {
-            if (err)
-                throw err;
-            var $ = cheerio.load(body);
+        return new Promise(function(resolve, reject) {
+            request(url, function(err, resp, body) {
+                if (err)
+                    throw err;
+                var $ = cheerio.load(body);
 
-            _.forEach(hiddenInputs, function (input) {
-                payloadsGrades[input] = $('#' + input).val();
+                _.forEach(hiddenInputs, function (input) {
+                    payloadsGrades[input] = $('#' + input).val();
+                });
+
+                resolve(payloadsGrades)
             });
-
-            resolve(payloadsGrades)
         });
     },
 
