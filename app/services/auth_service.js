@@ -107,7 +107,7 @@ module.exports = {
     },
     getUser: function(userId) {
         return new Promise(function (resolve) {
-            firebase.database.ref('/users/' + userId).once('value').then(function(snapshot) {
+                firebase.database.ref('/users/' + userId).once('value', function(snapshot) {
                 resolve(snapshot.val());
             });
         });
