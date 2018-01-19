@@ -6,6 +6,7 @@ var templates_service = require('./templates_service');
 var communication_service = require('./communication_service');
 var auth_service = require('./auth_service');
 var marks_service = require('./marks_service');
+var schedule_service = require('./schedule_service');
 var firebase = require('../lib/firebase');
 
 request = request.defaults({jar: true});
@@ -79,16 +80,20 @@ module.exports = function() {
 
         if (messagePayload.indexOf('semian') !== -1) {
             communication_service.sendGroupOptions(senderID);
+            firebase.database.ref('users/' + senderID).set({batch: message.text});
             return;
         }
 
         if (messagePayload.indexOf('grupa') !== -1) {
-            communication_service.sendTextMessage(senderID, 'nice');
+            schedule_service.getScheduleForCurrentUser(senderID);
+            firebase.database.ref('users/' + senderID).set({group: message.text});
             return;
         }
 
         if (messagePayload.indexOf('an') !== -1) {
             communication_service.sendBatchOptions(senderID);
+            firebase.database.ref('users/' + senderID).set({year: message.text});    
+
         }
     }
 
