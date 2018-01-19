@@ -55,5 +55,10 @@ module.exports = {
     sendLogoutButton: function(userID) {
         var messageData = templates_service.logoutButton(userID);
         module.exports.callSendAPI(messageData);
+    },
+
+    sendYearOptions: function(userID) {
+        var messageData = templates_service.yearQuickReplies(userID);
+        module.exports.callSendAPI(messageData);
     }
 };

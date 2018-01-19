@@ -32,6 +32,10 @@ var regularExpressions = [
         means: 'taxe'
     },
     {
+        regExp: /(orar)/g,
+        means: 'orar'
+    },
+    {
         regExp: /(login)/g,
         means: 'login'
     },
@@ -78,6 +82,9 @@ module.exports = function() {
                     break;
                 case 'logout':
                     communication_service.sendLogoutButton(senderID);
+                    break;
+                case 'orar':
+                    communication_service.sendYearOptions(senderID);
                     break;
                 case 'note_semestru':
                     var year = parseInt(params[0]);
