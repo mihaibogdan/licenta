@@ -69,9 +69,29 @@ module.exports = function() {
                 return ;
             }
         }
-
-        // send default message
     }
+
+    function handleQuickReply(event) {
+        var senderID = event.sender.id;
+
+        var message = event.message;
+
+        var messagePayload = message.quick_reply.payload;
+        if (messagePayload.indexOf('an') !== -1) {
+            communication_service.sendBatchOptions(senderID);
+            return;
+        }
+
+        if (messagePayload.indexOf('semian') !== -1) {
+            communication_service.sendGroupOptions(senderID);
+            return;
+        }
+
+        if (messagePayload.indexOf('grupa') !== -1) {
+            communication_service.sendTextMessage(senderID, 'nice');
+            return;
+        }
+    };
 
     function handleMessage (message, meaning, params, senderID, messageAttachments) {
         if (meaning) {
@@ -235,6 +255,7 @@ module.exports = function() {
     }
 
     return {
-        matchMessage: matchMessage
+        matchMessage: matchMessage,
+        handleQuickReply: handleQuickReply
     };
 };

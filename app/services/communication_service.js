@@ -60,5 +60,15 @@ module.exports = {
     sendYearOptions: function(userID) {
         var messageData = templates_service.yearQuickReplies(userID);
         module.exports.callSendAPI(messageData);
+    },
+
+    sendBatchOptions: function(userID) {
+        var messageData = templates_service.batchQuickReplies(userID);
+        module.exports.callSendAPI(messageData);
+    },
+
+    sendGroupOptions: function(userID) {
+        var messageData = templates_service.groupQuickReplies(userID);
+        module.exports.callSendAPI(messageData);
     }
 };
