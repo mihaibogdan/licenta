@@ -209,7 +209,6 @@ module.exports = function() {
                 if (err)
                     throw err;
                 var $ = cheerio.load(body);
-                console.log(body);
 
                 var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
 

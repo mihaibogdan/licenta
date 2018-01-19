@@ -94,6 +94,8 @@ module.exports = {
                     url: url
                 };
 
+                console.log(payload);
+
                 request(options, function (err, response, body) {
                     if (err) {
                         console.error('error posting json: ', err);
