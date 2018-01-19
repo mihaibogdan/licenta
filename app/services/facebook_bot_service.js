@@ -75,12 +75,7 @@ module.exports = function() {
         var senderID = event.sender.id;
 
         var message = event.message;
-
         var messagePayload = message.quick_reply.payload;
-        if (messagePayload.indexOf('an') !== -1) {
-            communication_service.sendBatchOptions(senderID);
-            return;
-        }
 
         if (messagePayload.indexOf('semian') !== -1) {
             communication_service.sendGroupOptions(senderID);
@@ -91,7 +86,11 @@ module.exports = function() {
             communication_service.sendTextMessage(senderID, 'nice');
             return;
         }
-    };
+
+        if (messagePayload.indexOf('an') !== -1) {
+            communication_service.sendBatchOptions(senderID);
+        }
+    }
 
     function handleMessage (message, meaning, params, senderID, messageAttachments) {
         if (meaning) {
