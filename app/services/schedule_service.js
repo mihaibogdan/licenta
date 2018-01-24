@@ -72,7 +72,7 @@ module.exports = {
                     var active = '';
 
                     for (var i = 1; i < data[0].length; i++ ) {
-                        if (isADay(data[i][i])) {
+                        if (isADay(data[0][i])) {
                             active = isADay(data[0][i]);
                         } else {
                             if (active) {
