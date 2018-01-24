@@ -182,7 +182,7 @@ module.exports = {
                     }
 
                     var result = {
-                        day: daysRO[moment().format('ddd')],
+                        day: nextDay[moment().format('ddd')],
                         schedule: schedule
                     };
                     resolve(result);
