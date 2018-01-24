@@ -3,6 +3,7 @@ var cheerio = require('cheerio');
 var jwt = require('json-web-token');
 
 var _ = require('lodash');
+var request = require('request');
 
 var firebase = require('../lib/firebase');
 var communication_service = require('./communication_service');
