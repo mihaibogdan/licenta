@@ -40,7 +40,7 @@ module.exports = {
                     var table = $('p:first-of-type').html();
                     cheerioTableparser($);
                     console.log(table);
-                    var data = $(table).parsetable();
+                    var data = $(table).parsetable(false, false, true);
                     console.log(data);
                     var started = false;
 
