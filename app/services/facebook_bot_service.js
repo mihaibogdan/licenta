@@ -295,6 +295,7 @@ module.exports = function() {
         communication_service.sendTextMessage(senderID, obj.day);
 
         _.forEach(obj.schedule, function(s) {
+            console.log(s);
             string = s.start + ' - ' + s.end + ' ' + s.discipline + ' ' + s.type + ' ' + s.room;
             communication_service.sendTextMessage(senderID, string);
         })
