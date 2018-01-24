@@ -122,7 +122,9 @@ module.exports = function() {
                                if (!user.year) {
                                    communication_service.sendYearOptions(senderID);
                                } else {
-                                   console.log('are deja date');
+                                   schedule_service.getSchedule(senderID).then(function (res) {
+                                       console.log(res);
+                                   });
                                }
                             });
 

@@ -10,6 +10,8 @@ var moment = require('moment');
 var firebase = require('../lib/firebase');
 var communication_service = require('./communication_service');
 
+var days = ['Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri'];
+
 var nextDay = {
     'Mon': 'Marti',
     'Tue': 'Miercuri',
@@ -18,7 +20,7 @@ var nextDay = {
     'Fri': 'Luni'
 };
 
-var days = {
+var daysRO = {
     'Mon': 'Luni',
     'Tue': 'Marti',
     'Wed': 'Miercuri',
@@ -34,7 +36,67 @@ var translate = {
   'Vineri': 'Fri'
 };
 
+function extractContent(s) {
+    var span= document.createElement('span');
+    span.innerHTML= s;
+    return span.textContent || span.innerText;
+}
+
+function isADay(text) {
+    for (var i = 0; i < days.length; i++) {
+        if (text.indexOf(days[i]) !== -1) {
+            return days[i];
+        }
+    }
+
+    return false;
+}
+
 module.exports = {
+    getSchedule: function(userID) {
+        return new Promise(function(resolve, reject) {
+            firebase.database.ref('users/' + userID).once('value', function(snapshot) {
+                var user = snapshot.val();
+
+                var url = 'https://profs.info.uaic.ro/~orar/participanti/orar_I' + user.year + user.batch + user.group + '.html';
+                request(url, function(err, resp, body) {
+                    if (err)
+                        throw err;
+                    $ = cheerio.load(body);
+                    var table = $('p:first-of-type').html();
+                    cheerioTableparser($);
+                    var data = $(table).parsetable(false, false, true);
+                    var start, end;
+
+                    var result = {
+                      'Luni': [],
+                      'Marti': [],
+                      'Miercuri': [],
+                      'Joi': [],
+                      'Viner': []
+                    };
+                    var active = '';
+                    for (var i = 1; i < data[0].length; i++ ) {
+                        if (isADay(data[i][i])) {
+                            active = isADay(data[i][i]);
+                        } else {
+                            result[active].push({
+                                start: data[0][i],
+                                end: data[1][i],
+                                discipline: data[2][i],
+                                type: extractContent(data[3][i]),
+                                room: extractContent(data[5][i])
+                            })
+                        }
+
+                    }
+
+                    console.log(result);
+                    resolve(result);
+                })
+            });
+        });
+    },
     getTodayScheduleForCurrentUser: function(userID) {
         return new Promise(function(resolve, reject) {
             firebase.database.ref('users/' + userID).once('value', function(snapshot) {
@@ -51,7 +113,7 @@ module.exports = {
                     var start, end;
 
                     for (var i = 1; i < data[0].length; i++ ) {
-                        if (data[0][i].indexOf(days[moment().format('ddd')]) !== -1) {
+                        if (data[0][i].indexOf(daysRO[moment().format('ddd')]) !== -1) {
                             start = i;
                         } else {
                             if (data[0][i].indexOf(nextDay[moment().format('ddd')]) !== -1) {
@@ -71,13 +133,13 @@ module.exports = {
                             start: data[0][i],
                             end: data[1][i],
                             discipline: data[2][i],
-                            type: data[3][i],
-                            room: data[5][i]
+                            type: extractContent(data[3][i]),
+                            room: extractContent(data[5][i])
                         });
                     }
 
                     var result = {
-                        day: days[moment().format('ddd')],
+                        day: daysRO[moment().format('ddd')],
                         schedule: schedule
                     };
                     resolve(result);
@@ -121,13 +183,13 @@ module.exports = {
                             start: data[0][i],
                             end: data[1][i],
                             discipline: data[2][i],
-                            type: data[3][i],
-                            room: data[5][i]
+                            type: extractContent(data[3][i]),
+                            room: extractContent(data[5][i])
                         });
                     }
 
                     var result = {
-                        day: days[moment().format('ddd')],
+                        day: daysRO[moment().format('ddd')],
                         schedule: schedule
                     };
                     resolve(result);
