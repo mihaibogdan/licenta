@@ -35,9 +35,21 @@ module.exports = {
                     if (err)
                         throw err;
                     $ = cheerio.load(body);
-                    var rows = $('table:first-of-type tr' ).toArray();
-                    console.log(rows);
+                    var rows = $('table:first-of-type tr');
+                    var started = false;
 
+                    for (var i = 1; i < rows.length; i++ ) {
+                        if (rows[i].children[0].children[0].children[0].data.indexOf(nextDay[moment().format('ddd')]) !== -1) {
+                            started = true;
+                        } else {
+                            if (started) {
+                                if (rows[i].children[0].children[0].children[0].data.indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
+                                    return;
+                                }
+                                console.log(rows[i].children[0].children[0].children[0].data);
+                            }
+                        }
+                    }
                     resolve();
                 })
             });
