@@ -85,6 +85,10 @@ module.exports = {
                             }
                         }
                     }
+
+                    result = _.transform(result, function(result, value, key) {
+                        result.push({day: key, schedule: value});
+                    }, []);
                     resolve(result);
                 })
             });

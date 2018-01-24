@@ -123,8 +123,8 @@ module.exports = function() {
                                    communication_service.sendYearOptions(senderID);
                                } else {
                                    schedule_service.getSchedule(senderID).then(function (res) {
-                                       async.forEachOfSeries(res, function iteree(s, key, scheduleCallback) {
-                                           showDaySchedule(senderID, { day: key, schedule: s}).then(function() {
+                                       async.eachSeries(res, function iteree(s, scheduleCallback) {
+                                           showDaySchedule(senderID, { day: s.day, schedule: s.schedule}).then(function() {
                                                scheduleCallback();
                                            });
                                        }, function done() {});
