@@ -134,7 +134,6 @@ module.exports = function() {
                     break;
                 case 'orar_maine':
                     schedule_service.getTomorrowScheduleForCurrentUser(senderID).then(function (res) {
-                        console.log(res);
                         showDaySchedule(senderID, res);
                     });
                     break;
@@ -293,7 +292,7 @@ module.exports = function() {
     function showDaySchedule(senderID, obj) {
         var string = '';
         communication_service.sendTextMessage(senderID, obj.day);
-
+        console.log(obj.schedule);
         _.forEach(obj.schedule, function(s) {
             console.log(s);
             string = s.start + ' - ' + s.end + ' ' + s.discipline + ' ' + s.type + ' ' + s.room;
