@@ -39,7 +39,6 @@ var translate = {
 
 function isADay(text) {
     for (var j = 0; j < days.length; j++) {
-        console.log(text, days[j]);
         if (text.indexOf(days[j]) !== -1) {
             return days[j];
         }
@@ -76,6 +75,7 @@ module.exports = {
                             active = isADay(data[0][i]);
                         } else {
                             if (active) {
+                                console.log(active);
                                 result[active].push({
                                     start: data[0][i],
                                     end: data[1][i],
