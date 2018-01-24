@@ -37,6 +37,10 @@ var regularExpressions = [
         means: 'orar'
     },
     {
+        regExp: /(orar( +)m(a|â)ine)/gi,
+        means: 'orar_maine'
+    },
+    {
         regExp: /(login)/g,
         means: 'login'
     },
@@ -119,6 +123,11 @@ module.exports = function() {
                             });
 
                         });
+                    break;
+                case 'orar_maine':
+                    schedule_service.getScheduleForCurrentUser(senderID).then(function () {
+                        console.log('done');
+                    });
                     break;
                 case 'note_semestru':
                     var year = parseInt(params[0]);
