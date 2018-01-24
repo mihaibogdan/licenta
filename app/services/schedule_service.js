@@ -39,24 +39,23 @@ module.exports = {
                     $ = cheerio.load(body);
                     var table = $('p:first-of-type').html();
                     cheerioTableparser($);
-                    console.log(table);
                     var data = $(table).parsetable(false, false, true);
-                    console.log(data);
-                    var started = false;
+                    var start, end;
 
-                    // for (var i = 1; i < rows.length; i++ ) {
-                    //     console.log(rows[i].children[0].data);
-                    //     // if (rows[i].children[0].data.indexOf(nextDay[moment().format('ddd')]) !== -1) {
-                    //     //     started = true;
-                    //     // } else {
-                    //     //     if (started) {
-                    //     //         if (rows[i].children[0].children[0].children[0].data.indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
-                    //     //             return;
-                    //     //         }
-                    //     //         console.log(rows[i].children[0].children[0].children[0].data);
-                    //     //     }
-                    //     // }
-                    // }
+                    for (var i = 1; i < data[0].length; i++ ) {
+                        if (data[0][i].indexOf(nextDay[moment().format('ddd')]) !== -1) {
+                            start = i;
+                        } else {
+                            if (started) {
+                                if (data[0][i].indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
+                                    end = i;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    console.log(start, end);
                     resolve();
                 })
             });
