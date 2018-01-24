@@ -37,9 +37,9 @@ module.exports = {
                     if (err)
                         throw err;
                     $ = cheerio.load(body);
+                    var table = $('table:first-of-type').text();
                     cheerioTableparser($);
-                    var rows = $('table:first-of-type tbody tr').text();
-                    var data = $("#complex").parsetable(true, true, true);
+                    var data = $(table).parsetable(true, true, true);
                     console.log(data);
                     var started = false;
 
