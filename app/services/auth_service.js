@@ -76,11 +76,11 @@ module.exports = {
     },
     login: function(username, password, request) {
         return new Promise(function(resolve, reject) {
-            console.log(username, password);
             payload['ctl00$mainCopy$Login1$UserName'] = username;
             payload['ctl00$mainCopy$Login1$Password'] = password;
 
             var url = 'http://simsweb.uaic.ro/eSIMS/MyLogin.aspx';
+            console.log(request);
             request(url, function(err, resp, body) {
                 console.log(body);
                 if (err)
