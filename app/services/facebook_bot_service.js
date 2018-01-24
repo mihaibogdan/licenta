@@ -80,19 +80,19 @@ module.exports = function() {
 
         if (messagePayload.indexOf('semian') !== -1) {
             communication_service.sendGroupOptions(senderID);
-            firebase.database.ref('users/' + senderID).set({batch: message.text});
+            firebase.database.ref('users/' + senderID).update({batch: message.text});
             return;
         }
 
         if (messagePayload.indexOf('grupa') !== -1) {
             schedule_service.getScheduleForCurrentUser(senderID);
-            firebase.database.ref('users/' + senderID).set({group: message.text});
+            firebase.database.ref('users/' + senderID).update({group: message.text});
             return;
         }
 
         if (messagePayload.indexOf('an') !== -1) {
             communication_service.sendBatchOptions(senderID);
-            firebase.database.ref('users/' + senderID).set({year: message.text});    
+            firebase.database.ref('users/' + senderID).update({year: message.text});
 
         }
     }
@@ -111,7 +111,6 @@ module.exports = function() {
                     auth_service.keepConnectionAlive(senderID, request)
                         .then(function() {
                             auth_service.getUser(senderID).then(function (user) {
-                                console.log(user);
                                if (!user.year) {
                                    communication_service.sendYearOptions(senderID);
                                } else {

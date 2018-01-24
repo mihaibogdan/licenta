@@ -10,7 +10,6 @@ var auth_service = require('../services/auth_service');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 router.post('/login', urlencodedParser, function (req, res) {
-    console.log(req.body);
     if (req.body && req.body.redirect_uri) {
         var username = req.body['ctl00$mainCopy$Login1$UserName'];
         var password = req.body['ctl00$mainCopy$Login1$Password'];

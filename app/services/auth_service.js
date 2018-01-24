@@ -80,9 +80,7 @@ module.exports = {
             payload['ctl00$mainCopy$Login1$Password'] = password;
 
             var url = 'http://simsweb.uaic.ro/eSIMS/MyLogin.aspx';
-            console.log(request);
             request(url, function(err, resp, body) {
-                console.log(body);
                 if (err)
                     throw err;
                 var $ = cheerio.load(body);
@@ -98,7 +96,6 @@ module.exports = {
                 };
 
                 request(options, function (err, response, body) {
-                    console.log(body);
                     if (err) {
                         console.error('error posting json: ', err);
                         reject();
