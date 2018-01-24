@@ -75,6 +75,7 @@ module.exports = {
     },
     login: function(username, password, request) {
         return new Promise(function(resolve, reject) {
+            console.log(username, password);
             payload['ctl00$mainCopy$Login1$UserName'] = username;
             payload['ctl00$mainCopy$Login1$Password'] = password;
 
