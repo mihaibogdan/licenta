@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var jwt = require('json-web-token');
+var request = require('request');
 
 var facebook_bot_service = require('../services/facebook_bot_service')();
 var auth_service = require('../services/auth_service');
@@ -15,7 +16,7 @@ router.post('/login', urlencodedParser, function (req, res) {
         var password = req.body['ctl00$mainCopy$Login1$Password'];
         var redirect_uri = req.body['redirect_uri'];
 
-        auth_service.login(username, password).then(function () {
+        auth_service.login(username, password, request).then(function () {
             var payload = { username: username, password: password };
             var secret = new Buffer(process.env.JWT_SECRET).toString('base64');
 
