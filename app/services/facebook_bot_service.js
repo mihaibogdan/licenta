@@ -41,6 +41,10 @@ var regularExpressions = [
         means: 'orar_maine'
     },
     {
+        regExp: /(orar( +)azi)/gi,
+        means: 'orar_azi'
+    },
+    {
         regExp: /(login)/g,
         means: 'login'
     },
@@ -125,8 +129,13 @@ module.exports = function() {
                         });
                     break;
                 case 'orar_maine':
-                    schedule_service.getScheduleForCurrentUser(senderID).then(function () {
-                        console.log('done');
+                    schedule_service.getTomorrowScheduleForCurrentUser(senderID).then(function (res) {
+                        console.log(res);
+                    });
+                    break;
+                case 'orar_azi':
+                    schedule_service.getTodayScheduleForCurrentUser(senderID).then(function (res) {
+                        console.log(res);
                     });
                     break;
                 case 'note_semestru':
