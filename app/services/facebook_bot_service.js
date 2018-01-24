@@ -33,7 +33,7 @@ var regularExpressions = [
         means: 'taxe'
     },
     {
-        regExp: /^(orar)&/,
+        regExp: /^(orar)&/g,
         means: 'orar'
     },
     {
@@ -122,6 +122,7 @@ module.exports = function() {
                                if (!user.year) {
                                    communication_service.sendYearOptions(senderID);
                                } else {
+                                   console.log('orar');
                                    schedule_service.getSchedule(senderID).then(function (res) {
                                        console.log(res);
                                    });
