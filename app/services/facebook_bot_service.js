@@ -291,12 +291,18 @@ module.exports = function() {
 
     function showDaySchedule(senderID, obj) {
         var string = '';
-        communication_service.sendTextMessage(senderID, obj.day);
-        console.log(obj.schedule);
-        for (var i = 0; i < obj.schedule.length; i++) {
-            string = obj.schedule[i].start + ' - ' + obj.schedule[i].end + ' ' + obj.schedule[i].discipline + ' ' + obj.schedule[i].type + ' ' + obj.schedule[i].room;
-            communication_service.sendTextMessage(senderID, string);
-        }
+        communication_service.sendTextMessage(senderID, obj.day).then(function() {
+            async.eachSeries(obj.schedule, function iteree(line, scheduleCallback) {
+                string = line.start + ' - ' + line.end + ' ' + line.discipline + ' ' + line.type + ' ' + line.room;
+
+                communication_service.sendTextMessage(senderID, string).then((function() {
+                    scheduleCallback(null);
+                }));
+            }, function done() {
+                console.log('done');
+            });
+        });
+
     }
 
     return {
