@@ -97,7 +97,7 @@ module.exports = function() {
         }
 
         if (messagePayload.indexOf('grupa') !== -1) {
-            schedule_service.getScheduleForCurrentUser(senderID);
+            schedule_service.getTodayScheduleForCurrentUser(senderID);
             firebase.database.ref('users/' + senderID).update({group: message.text});
             return;
         }
