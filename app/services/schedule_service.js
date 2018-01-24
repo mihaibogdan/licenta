@@ -38,9 +38,10 @@ var translate = {
 };
 
 function isADay(text) {
-    for (var i = 0; i < days.length; i++) {
-        if (text.indexOf(days[i]) !== -1) {
-            return days[i];
+    for (var j = 0; j < days.length; j++) {
+        if (text.indexOf(days[j]) !== -1) {
+            console.log(days[j]);
+            return days[j];
         }
     }
 
@@ -61,7 +62,6 @@ module.exports = {
                     var table = $('p:first-of-type').html();
                     cheerioTableparser($);
                     var data = $(table).parsetable(false, false, true);
-                    var start, end;
 
                     var result = {
                       'Luni': [],
