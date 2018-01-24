@@ -35,11 +35,11 @@ module.exports = {
                     if (err)
                         throw err;
                     $ = cheerio.load(body);
-                    var rows = $('table:first-of-type tr');
+                    var rows = $('table:first-of-type tbody tr');
                     var started = false;
 
                     for (var i = 1; i < rows.length; i++ ) {
-                        console.log(rows[i].children[0].children[0]);
+                        console.log(rows[i].children[0].data);
                         // if (rows[i].children[0].data.indexOf(nextDay[moment().format('ddd')]) !== -1) {
                         //     started = true;
                         // } else {
