@@ -84,10 +84,7 @@ module.exports = {
                                 })
                             }
                         }
-
                     }
-
-                    console.log(result);
                     resolve(result);
                 })
             });

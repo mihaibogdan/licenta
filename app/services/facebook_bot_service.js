@@ -122,9 +122,10 @@ module.exports = function() {
                                if (!user.year) {
                                    communication_service.sendYearOptions(senderID);
                                } else {
-                                   console.log('orar');
                                    schedule_service.getSchedule(senderID).then(function (res) {
-                                       console.log(res);
+                                       _.forEach(res, function(value, key) {
+                                           showDaySchedule({day: key, schedule: value});
+                                       })
                                    });
                                }
                             });
@@ -133,12 +134,12 @@ module.exports = function() {
                     break;
                 case 'orar_maine':
                     schedule_service.getTomorrowScheduleForCurrentUser(senderID).then(function (res) {
-                        console.log(res);
+                        showDaySchedule(res);
                     });
                     break;
                 case 'orar_azi':
                     schedule_service.getTodayScheduleForCurrentUser(senderID).then(function (res) {
-                        console.log(res);
+                        showDaySchedule(res);
                     });
                     break;
                 case 'note_semestru':
@@ -286,7 +287,14 @@ module.exports = function() {
                  resolve();
             });
         })
-        
+    }
+
+    function showDaySchedule(obj) {
+        communication_service.sendTextMessage(senderID, obj.day);
+
+        _.forEach(obj.schedule, function(s) {
+            communication_service.sendTextMessage(senderID, s);
+        })
     }
 
     return {
