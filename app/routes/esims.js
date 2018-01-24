@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var request = require('request');
-var cryptoJSON = require('crypto-json')
+var cryptoJSON = require('crypto-json');
 
 var facebook_bot_service = require('../services/facebook_bot_service')();
 var auth_service = require('../services/auth_service');
