@@ -51,8 +51,10 @@ function isADay(text) {
 module.exports = {
     getSchedule: function(userID) {
         return new Promise(function(resolve, reject) {
+            console.log('hereee')
             firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                 var user = snapshot.val();
+                console.log('hereee2')
 
                 var url = 'https://profs.info.uaic.ro/~orar/participanti/orar_I' + user.year + user.batch + user.group + '.html';
                 request(url, function(err, resp, body) {
