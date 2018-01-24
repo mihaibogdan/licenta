@@ -33,7 +33,7 @@ var regularExpressions = [
         means: 'taxe'
     },
     {
-        regExp: /(orar)/g,
+        regExp: /^(orar)&/,
         means: 'orar'
     },
     {
