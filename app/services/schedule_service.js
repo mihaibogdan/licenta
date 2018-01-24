@@ -46,11 +46,9 @@ module.exports = {
                         if (data[0][i].indexOf(nextDay[moment().format('ddd')]) !== -1) {
                             start = i;
                         } else {
-                            if (started) {
-                                if (data[0][i].indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
-                                    end = i;
-                                    return;
-                                }
+                            if (data[0][i].indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
+                                end = i;
+                                return;
                             }
                         }
                     }
