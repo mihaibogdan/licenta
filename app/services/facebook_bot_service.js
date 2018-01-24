@@ -123,9 +123,11 @@ module.exports = function() {
                                    communication_service.sendYearOptions(senderID);
                                } else {
                                    schedule_service.getSchedule(senderID).then(function (res) {
-                                       _.forEach(res, function(value, key) {
-                                           showDaySchedule(senderID, {day: key, schedule: value});
-                                       })
+                                       async.forEachOf(res, function iteree(s, key, scheduleCallback) {
+                                           showDaySchedule(senderID, { day: key, schedule: s}).then(function() {
+                                               scheduleCallback();
+                                           });
+                                       }, function done() {});
                                    });
                                }
                             });
@@ -291,18 +293,19 @@ module.exports = function() {
 
     function showDaySchedule(senderID, obj) {
         var string = '';
-        communication_service.sendTextMessage(senderID, obj.day).then(function() {
-            async.eachSeries(obj.schedule, function iteree(line, scheduleCallback) {
-                string = line.start + ' - ' + line.end + ' ' + line.discipline + ' ' + line.type + ' ' + line.room;
+        return new Promise(function(resolve, reject) {
+            communication_service.sendTextMessage(senderID, obj.day).then(function() {
+                async.eachSeries(obj.schedule, function iteree(line, scheduleCallback) {
+                    string = line.start + ' - ' + line.end + ' ' + line.discipline + ' ' + line.type + ' ' + line.room;
 
-                communication_service.sendTextMessage(senderID, string).then((function() {
-                    scheduleCallback(null);
-                }));
-            }, function done() {
-                console.log('done');
+                    communication_service.sendTextMessage(senderID, string).then((function() {
+                        scheduleCallback(null);
+                    }));
+                }, function done() {
+                    resolve();
+                });
             });
-        });
-
+        })
     }
 
     return {
