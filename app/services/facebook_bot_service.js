@@ -124,7 +124,7 @@ module.exports = function() {
                                } else {
                                    schedule_service.getSchedule(senderID).then(function (res) {
                                        _.forEach(res, function(value, key) {
-                                           showDaySchedule({day: key, schedule: value});
+                                           showDaySchedule(senderID, {day: key, schedule: value});
                                        })
                                    });
                                }
@@ -134,12 +134,12 @@ module.exports = function() {
                     break;
                 case 'orar_maine':
                     schedule_service.getTomorrowScheduleForCurrentUser(senderID).then(function (res) {
-                        showDaySchedule(res);
+                        showDaySchedule(senderID, res);
                     });
                     break;
                 case 'orar_azi':
                     schedule_service.getTodayScheduleForCurrentUser(senderID).then(function (res) {
-                        showDaySchedule(res);
+                        showDaySchedule(senderID, res);
                     });
                     break;
                 case 'note_semestru':
@@ -289,7 +289,7 @@ module.exports = function() {
         })
     }
 
-    function showDaySchedule(obj) {
+    function showDaySchedule(senderID, obj) {
         communication_service.sendTextMessage(senderID, obj.day);
 
         _.forEach(obj.schedule, function(s) {
