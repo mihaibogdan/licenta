@@ -19,9 +19,7 @@ router.post('/login', urlencodedParser, function (req, res) {
             var payload = { username: username, password: password };
             var passKey = new Buffer(process.env.JWT_SECRET).toString('base64');
 
-            var encrypted = cryptoJSON.encrypt(payload, passKey, {
-                keys: ['password', 'username']
-            });
+            var encrypted = cryptoJSON.encrypt(payload, passKey);
 
             var redirectUri = redirect_uri + '&authorization_code=' + JSON.stringify(encrypted);
             return res.redirect(redirectUri);
