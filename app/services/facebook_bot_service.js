@@ -293,11 +293,10 @@ module.exports = function() {
         var string = '';
         communication_service.sendTextMessage(senderID, obj.day);
         console.log(obj.schedule);
-        _.forEach(obj.schedule, function(s) {
-            console.log(s);
-            string = s.start + ' - ' + s.end + ' ' + s.discipline + ' ' + s.type + ' ' + s.room;
+        for (var i = 0; i < obj.schedule.length; i++) {
+            string = obj.schedule[i].start + ' - ' + obj.schedule[i].end + ' ' + obj.schedule[i].discipline + ' ' + obj.schedule[i].type + ' ' + obj.schedule[i].room;
             communication_service.sendTextMessage(senderID, string);
-        })
+        }
     }
 
     return {
