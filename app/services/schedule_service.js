@@ -35,7 +35,8 @@ module.exports = {
                     if (err)
                         throw err;
                     $ = cheerio.load(body);
-                    console.log(body);
+                    var rows = $('table:first-of-type tr' ).toArray();
+                    console.log(rows);
 
                     resolve();
                 })
