@@ -33,16 +33,16 @@ var regularExpressions = [
         means: 'taxe'
     },
     {
-        regExp: /^(orar)&/g,
-        means: 'orar'
-    },
-    {
         regExp: /(orar( +)m(a|â)ine)/gi,
         means: 'orar_maine'
     },
     {
         regExp: /(orar( +)azi)/gi,
         means: 'orar_azi'
+    },
+    {
+        regExp: /(orar)/g,
+        means: 'orar'
     },
     {
         regExp: /(login)/g,
