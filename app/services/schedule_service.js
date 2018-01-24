@@ -39,8 +39,8 @@ var translate = {
 
 function isADay(text) {
     for (var j = 0; j < days.length; j++) {
+        console.log(text, days[j]);
         if (text.indexOf(days[j]) !== -1) {
-            console.log(days[j]);
             return days[j];
         }
     }
@@ -51,11 +51,8 @@ function isADay(text) {
 module.exports = {
     getSchedule: function(userID) {
         return new Promise(function(resolve, reject) {
-            console.log('hereee')
             firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                 var user = snapshot.val();
-                console.log('hereee2')
-
                 var url = 'https://profs.info.uaic.ro/~orar/participanti/orar_I' + user.year + user.batch + user.group + '.html';
                 request(url, function(err, resp, body) {
                     if (err)
@@ -75,17 +72,18 @@ module.exports = {
                     var active = '';
 
                     for (var i = 1; i < data[0].length; i++ ) {
-                        console.log(isADay(data[i][i]));
                         if (isADay(data[i][i])) {
                             active = isADay(data[0][i]);
                         } else {
-                            result[active].push({
-                                start: data[0][i],
-                                end: data[1][i],
-                                discipline: data[2][i],
-                                type: htmlToText.fromString(data[3][i]),
-                                room: htmlToText.fromString(data[5][i])
-                            })
+                            if (active) {
+                                result[active].push({
+                                    start: data[0][i],
+                                    end: data[1][i],
+                                    discipline: data[2][i],
+                                    type: htmlToText.fromString(data[3][i]),
+                                    room: htmlToText.fromString(data[5][i])
+                                })
+                            }
                         }
 
                     }
