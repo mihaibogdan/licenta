@@ -1,6 +1,6 @@
 var Promise = require('promise');
 var cheerio = require('cheerio');
-var jwt = require('json-web-token');
+var cryptoJSON = require('crypto-json');
 
 var _ = require('lodash');
 var request = require('request');
@@ -60,10 +60,14 @@ module.exports = {
                             communication_service.sendLoginButton(userID);
                             reject();
                         } else {
-                            jwt.decode(process.env.JWT_SECRET, user, function (err_, decodedPayload) {
-                                module.exports.login(decodedPayload.username, decodedPayload.password, request).then(function() {
-                                    resolve();
-                                })
+                            var passKey = new Buffer(process.env.JWT_SECRET).toString('base64');
+
+                            var decrypted = cryptoJSON.decrypt(JSON.parse(user.credentials), passKey, {
+                                keys: []
+                            });
+
+                            module.exports.login(decrypted.username, decrypted.password, request).then(function() {
+                                resolve();
                             });
                         }
                     })
