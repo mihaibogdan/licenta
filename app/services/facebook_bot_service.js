@@ -41,6 +41,10 @@ var regularExpressions = [
         means: 'orar_azi'
     },
     {
+        regExp: /(orar( +)reset)/gi,
+        means: 'orar_reset'
+    },
+    {
         regExp: /(orar)/g,
         means: 'orar'
     },
@@ -134,6 +138,12 @@ module.exports = function() {
 
                         });
                     break;
+                case 'orar_reset':
+                    auth_service.keepConnectionAlive(senderID, request)
+                        .then(function() {
+                            communication_service.sendYearOptions(senderID);
+                        });
+                    break;
                 case 'orar_maine':
                     schedule_service.getTomorrowScheduleForCurrentUser(senderID).then(function (res) {
                         showDaySchedule(senderID, res);
@@ -220,10 +230,6 @@ module.exports = function() {
                     semesterCallback(null);
                 })
             });
-
-
-
-
         }, function done() {
             if (!restante) {
                 communication_service.sendTextMessage(senderID, 'Nu ai nicio restanta!');
