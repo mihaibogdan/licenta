@@ -258,37 +258,39 @@ module.exports = function() {
     function verifyTaxes(senderID) {
         var marks = [];
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-        var options = {
-            method: 'post',
-            form: payloadsGrades,
-            url: url
-        };
-        var atLeastOne = false;
+        marks_service.getPayload().then(function(payloadGrades) {
+            var options = {
+                method: 'post',
+                form: payloadGrades,
+                url: url
+            };
+            var atLeastOne = false;
 
-        return new Promise(function(resolve, reject) {
-            request(options, function(err, resp, body) {
-                if (err)
-                    throw err;
-                var $ = cheerio.load(body);
+            return new Promise(function(resolve, reject) {
+                request(options, function(err, resp, body) {
+                    if (err)
+                        throw err;
+                    var $ = cheerio.load(body);
 
 
-                var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp1896648950_wp1261240874_GridViewTaxe tr');
+                    var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp1896648950_wp1261240874_GridViewTaxe tr');
 
-                for(var i = 0; i < discipline.length; i++) {
-                    if (i > 0) {
-                        if (!discipline[i].children[1].children[0].children[0].data) {
-                            communication_service.sendTextMessage(senderID, discipline[i].children[1].children[0].children[0].data + ' ' + discipline[i].children[2].children[0].children[0].data);
-                            atLeastOne = true;
+                    for(var i = 0; i < discipline.length; i++) {
+                        if (i > 0) {
+                            if (!discipline[i].children[1].children[0].children[0].data) {
+                                communication_service.sendTextMessage(senderID, discipline[i].children[1].children[0].children[0].data + ' ' + discipline[i].children[2].children[0].children[0].data);
+                                atLeastOne = true;
+                            }
                         }
                     }
-                }
 
-                if (!atLeastOne) {
-                    communication_service.sendTextMessage(senderID, 'Nu ai de platit nicio taxa!');
-                }
-                 resolve();
-            });
-        })
+                    if (!atLeastOne) {
+                        communication_service.sendTextMessage(senderID, 'Nu ai de platit nicio taxa!');
+                    }
+                    resolve();
+                });
+            })
+        });
     }
 
     function showDaySchedule(senderID, obj) {
