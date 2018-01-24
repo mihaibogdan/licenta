@@ -26,6 +26,14 @@ var days = {
     'Fri': 'Vineri'
 };
 
+var translate = {
+  'Luni': 'Mon',
+  'Marti': 'Tue',
+  'Miercuri': 'Wed',
+  'Joi': 'Thu',
+  'Vineri': 'Fri'
+};
+
 module.exports = {
     getScheduleForCurrentUser: function(userID) {
         return new Promise(function(resolve, reject) {
@@ -46,14 +54,29 @@ module.exports = {
                         if (data[0][i].indexOf(nextDay[moment().format('ddd')]) !== -1) {
                             start = i;
                         } else {
-                            if (data[0][i].indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
+                            if (data[0][i].indexOf(nextDay[translate[nextDay[moment().format('ddd')]]]) !== -1) {
                                 end = i;
                                 return;
                             }
                         }
                     }
 
-                    console.log(start, end);
+                    var schedule = [];
+
+                    for (i = start + 1; i < end; i++) {
+                        schedule.push({
+                            start: data[0][i],
+                            end: data[1][i],
+                            discipline: data[2][i],
+                            type: data[3][i],
+                            room: data[5][i]
+                        });
+                    }
+
+                    console.log({
+                        day: translate[moment().format('ddd')],
+                        schedule: schedule
+                    });
                     resolve();
                 })
             });
