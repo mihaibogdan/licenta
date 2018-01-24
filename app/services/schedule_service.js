@@ -1,6 +1,7 @@
 var Promise = require('promise');
 var cheerio = require('cheerio');
 var cheerioTableparser = require('cheerio-tableparser');
+var htmlToText = require('html-to-text');
 
 var request = require('request');
 
@@ -36,12 +37,6 @@ var translate = {
   'Vineri': 'Fri'
 };
 
-function extractContent(s) {
-    var span= document.createElement('span');
-    span.innerHTML= s;
-    return span.textContent || span.innerText;
-}
-
 function isADay(text) {
     for (var i = 0; i < days.length; i++) {
         if (text.indexOf(days[i]) !== -1) {
@@ -76,16 +71,18 @@ module.exports = {
                       'Viner': []
                     };
                     var active = '';
+
                     for (var i = 1; i < data[0].length; i++ ) {
+                        console.log(isADay(data[i][i]));
                         if (isADay(data[i][i])) {
-                            active = isADay(data[i][i]);
+                            active = isADay(data[0][i]);
                         } else {
                             result[active].push({
                                 start: data[0][i],
                                 end: data[1][i],
                                 discipline: data[2][i],
-                                type: extractContent(data[3][i]),
-                                room: extractContent(data[5][i])
+                                type: htmlToText.fromString(data[3][i]),
+                                room: htmlToText.fromString(data[5][i])
                             })
                         }
 
@@ -133,8 +130,8 @@ module.exports = {
                             start: data[0][i],
                             end: data[1][i],
                             discipline: data[2][i],
-                            type: extractContent(data[3][i]),
-                            room: extractContent(data[5][i])
+                            type: htmlToText.fromString(data[3][i]),
+                            room: htmlToText.fromString(data[5][i])
                         });
                     }
 
@@ -183,8 +180,8 @@ module.exports = {
                             start: data[0][i],
                             end: data[1][i],
                             discipline: data[2][i],
-                            type: extractContent(data[3][i]),
-                            room: extractContent(data[5][i])
+                            type: htmlToText.fromString(data[3][i]),
+                            room: htmlToText.fromString(data[5][i])
                         });
                     }
 
