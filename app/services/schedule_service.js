@@ -1,5 +1,7 @@
 var Promise = require('promise');
 var cheerio = require('cheerio');
+var cheerioTableparser = require('cheerio-tableparser');
+
 var request = require('request');
 
 var _ = require('lodash');
@@ -35,22 +37,25 @@ module.exports = {
                     if (err)
                         throw err;
                     $ = cheerio.load(body);
-                    var rows = $('table:first-of-type tbody tr');
+                    cheerioTableparser($);
+                    var rows = $('table:first-of-type tbody tr').text();
+                    var data = $("#complex").parsetable(true, true, true);
+                    console.log(data);
                     var started = false;
 
-                    for (var i = 1; i < rows.length; i++ ) {
-                        console.log(rows[i].children[0].data);
-                        // if (rows[i].children[0].data.indexOf(nextDay[moment().format('ddd')]) !== -1) {
-                        //     started = true;
-                        // } else {
-                        //     if (started) {
-                        //         if (rows[i].children[0].children[0].children[0].data.indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
-                        //             return;
-                        //         }
-                        //         console.log(rows[i].children[0].children[0].children[0].data);
-                        //     }
-                        // }
-                    }
+                    // for (var i = 1; i < rows.length; i++ ) {
+                    //     console.log(rows[i].children[0].data);
+                    //     // if (rows[i].children[0].data.indexOf(nextDay[moment().format('ddd')]) !== -1) {
+                    //     //     started = true;
+                    //     // } else {
+                    //     //     if (started) {
+                    //     //         if (rows[i].children[0].children[0].children[0].data.indexOf(nextDay[nextDay[moment().format('ddd')]]) !== -1) {
+                    //     //             return;
+                    //     //         }
+                    //     //         console.log(rows[i].children[0].children[0].children[0].data);
+                    //     //     }
+                    //     // }
+                    // }
                     resolve();
                 })
             });
