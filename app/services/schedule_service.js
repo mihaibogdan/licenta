@@ -37,11 +37,11 @@ module.exports = {
                     if (err)
                         throw err;
                     $ = cheerio.load(body);
-                    var table = $('table:first-of-type').text();
+                    var table = $('table:first-of-type').html();
                     cheerioTableparser($);
                     console.log(table);
-                    // var data = $(table).parsetable();
-                    // console.log(data);
+                    var data = $(table).parsetable();
+                    console.log(data);
                     var started = false;
 
                     // for (var i = 1; i < rows.length; i++ ) {
