@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
-var jwt = require('json-web-token');
 var request = require('request');
+var cryptoJSON = require('crypto-json')
 
 var facebook_bot_service = require('../services/facebook_bot_service')();
 var auth_service = require('../services/auth_service');
@@ -17,17 +17,14 @@ router.post('/login', urlencodedParser, function (req, res) {
 
         auth_service.login(username, password, request).then(function () {
             var payload = { username: username, password: password };
-            var secret = new Buffer(process.env.JWT_SECRET).toString('base64');
+            var passKey = new Buffer(process.env.JWT_SECRET).toString('base64');
 
-            jwt.encode(secret, payload, 'HS384', function (err, token) {
-                if (err) {
-                    console.error(err.name, err.message);
-                } else {
-                    var redirectUri = redirect_uri + '&authorization_code=' + token;
-                    return res.redirect(redirectUri);
-                }
+            var encrypted = cryptoJSON.encrypt(payload, passKey, {
+                keys: ['password']
             });
 
+            var redirectUri = redirect_uri + '&authorization_code=' + encrypted.password;
+            return res.redirect(redirectUri);
         })
 
 
