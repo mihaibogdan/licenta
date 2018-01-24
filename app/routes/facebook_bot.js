@@ -30,7 +30,7 @@ router.post('/webhook', function (req, res) {
                 } else if (event.account_linking) {
                     if (event.account_linking.status === 'linked') {
                         var newUser = {};
-                        newUser[event.sender.id] = event.account_linking.authorization_code;
+                        newUser[event.sender.id] = { token: event.account_linking.authorization_code };
 
                         firebase.database.ref('users').set(newUser);
                     } else {
