@@ -66,7 +66,7 @@ module.exports = {
                       'Marti': [],
                       'Miercuri': [],
                       'Joi': [],
-                      'Viner': []
+                      'Vineri': []
                     };
                     var active = '';
 
@@ -75,7 +75,6 @@ module.exports = {
                             active = isADay(data[0][i]);
                         } else {
                             if (active) {
-                                console.log(active);
                                 result[active].push({
                                     start: data[0][i],
                                     end: data[1][i],
