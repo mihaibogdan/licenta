@@ -56,7 +56,6 @@ module.exports = {
                         } else {
                             if (data[0][i].indexOf(nextDay[translate[nextDay[moment().format('ddd')]]]) !== -1) {
                                 end = i;
-                                return;
                             }
                         }
                     }
@@ -65,20 +64,20 @@ module.exports = {
 
                     var schedule = [];
 
-                    // for (i = start + 1; i < end; i++) {
-                    //     schedule.push({
-                    //         start: data[0][i],
-                    //         end: data[1][i],
-                    //         discipline: data[2][i],
-                    //         type: data[3][i],
-                    //         room: data[5][i]
-                    //     });
-                    // }
-                    //
-                    // console.log({
-                    //     day: translate[moment().format('ddd')],
-                    //     schedule: schedule
-                    // });
+                    for (i = start + 1; i < end; i++) {
+                        schedule.push({
+                            start: data[0][i],
+                            end: data[1][i],
+                            discipline: data[2][i],
+                            type: data[3][i],
+                            room: data[5][i]
+                        });
+                    }
+
+                    console.log({
+                        day: translate[moment().format('ddd')],
+                        schedule: schedule
+                    });
                     resolve();
                 })
             });
