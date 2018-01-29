@@ -18,7 +18,9 @@ var nextDay = {
     'Tue': 'Miercuri',
     'Wed': 'Joi',
     'Thu': 'Vineri',
-    'Fri': 'Luni'
+    'Fri': 'Luni',
+    'Sat': 'Luni',
+    'Sun': "Luni"
 };
 
 var daysRO = {
@@ -26,7 +28,9 @@ var daysRO = {
     'Tue': 'Marti',
     'Wed': 'Miercuri',
     'Thu': 'Joi',
-    'Fri': 'Vineri'
+    'Fri': 'Vineri',
+    'Sat': 'Luni',
+    'Sun': "Luni"
 };
 
 var translate = {
