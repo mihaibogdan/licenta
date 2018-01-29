@@ -81,7 +81,7 @@ module.exports = function() {
         for (var i = 0; i < regularExpressions.length; i++) {
             match = lowerCaseMessage.match(regularExpressions[i].regExp);
             if (match) {
-                params = lowerCaseMessage.match(/\d/g);
+                params = lowerCaseMessage.match(/\d not(a|ă)( +)*/g);
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
                 return ;
             }
