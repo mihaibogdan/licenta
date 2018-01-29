@@ -210,6 +210,7 @@ module.exports = {
                     module.exports.getMarks(semester, payload).then(function (marks) {
                         _.forEach(marks, function (mark) {
                             for(var i = 0; i < disciplines.length; i++) {
+                                console.log(mark.name, disciplines[i]);
                                 if (mark.name.indexOf(disciplines[i]) !== -1) {
                                     finalMarks.push(mark);
                                 }
