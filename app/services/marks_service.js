@@ -205,6 +205,7 @@ module.exports = {
             var finalMarks = [];
             async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
                 module.exports.getPayload().then(function (payload) {
+                    console.log(payload);
                     module.exports.getMarks(semester, payload).then(function (marks) {
                         _.forEach(marks, function (mark) {
                             for(var i = 0; i < disciplines.length; i++) {
