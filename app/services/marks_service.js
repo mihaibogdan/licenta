@@ -105,7 +105,7 @@ module.exports = {
         acso: ["Arhitectura calculatoarelor şi sisteme de operare"],
         logica: ['Logică pentru informatică'],
         matematica: ["Matematică"],
-        matem: ["Matematică"],
+        mate: ["Matematică"],
         pc: ["Programare competitivă I", "Programare competitivă II", "Programare competitivă III", "Programare competitivă IV", "Programare competitivă V"],
         poo: ['Programare orientată-obiect'],
         so: ['Sisteme de operare'],
@@ -163,8 +163,6 @@ module.exports = {
             url: url
         };
 
-        console.log(payload);
-
         return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
                 if (err)
@@ -204,15 +202,12 @@ module.exports = {
 
     findMarks: function(senderID, disciplines, semesters) {
         var finalMarks = [];
-        console.log(semesters);
         return new Promise(function (resolve, reject) {
             async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
                 module.exports.getPayload().then(function (payload) {
                     module.exports.getMarks(semester, payload).then(function (marks) {
-                        console.log(marks);
                         _.forEach(marks, function (mark) {
                             for(var i = 0; i < disciplines.length; i++) {
-                                console.log(mark.name, disciplines[i]);
                                 if (mark.name.indexOf(disciplines[i]) !== -1) {
                                     finalMarks.push(mark);
                                 }
