@@ -185,9 +185,8 @@ module.exports = {
     scrapeMarks:function(senderID, year, semesters) {
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
             communication_service.sendTextMessage(senderID, '-------An ' + year + ', semestrul ' + ((semester % 2) + 1) + '-------');
-
-            marks_service.getPayload().then(function(payload) {
-                marks_service.getMarks(semester, payload).then(function(marks) {
+            this.getPayload().then(function(payload) {
+                this.getMarks(semester, payload).then(function(marks) {
                     async.eachSeries(marks, function markIteree(mark, markCallback) {
                         communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
                             markCallback(null);
@@ -206,8 +205,8 @@ module.exports = {
         var finalMarks = [];
         return new Promise(function (resolve, reject) {
             async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
-                marks_service.getPayload().then(function (payload) {
-                    marks_service.getMarks(semester, payload).then(function (marks) {
+                this.getPayload().then(function (payload) {
+                    this.getMarks(semester, payload).then(function (marks) {
                         _.forEach(marks, function (mark) {
                             for(var i = 0; i < disciplines.length; i++) {
                                 if (mark.name.indexOf(disciplines[i]) !== -1) {
