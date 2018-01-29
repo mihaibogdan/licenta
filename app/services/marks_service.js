@@ -136,7 +136,7 @@ module.exports = {
         cc: ['Cloud Computing'],
         petri: ['Reţele Petri şi aplicaţii']
     },
-    getPayload: function() {
+    getPayload: function(request) {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         return new Promise(function(resolve, reject) {
             request(url, function(err, resp, body) {
@@ -153,7 +153,7 @@ module.exports = {
         });
     },
 
-    getMarks: function(semester, payload) {
+    getMarks: function(semester, payload, request) {
         var marks = [];
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
         payload.__EVENTARGUMENT = 'Select$' + semester;
@@ -182,11 +182,12 @@ module.exports = {
             });
         })
     },
-    scrapeMarks:function(senderID, year, semesters) {
+    scrapeMarks:function(senderID, year, semesters, request) {
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
             communication_service.sendTextMessage(senderID, '-------An ' + year + ', semestrul ' + ((semester % 2) + 1) + '-------');
-            this.getPayload().then(function(payload) {
-                this.getMarks(semester, payload).then(function(marks) {
+            this.getPayload(request).then(function(payload) {
+                console.log(payload);
+                this.getMarks(semester, payload, request).then(function(marks) {
                     async.eachSeries(marks, function markIteree(mark, markCallback) {
                         communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
                             markCallback(null);
@@ -205,8 +206,8 @@ module.exports = {
         var finalMarks = [];
         return new Promise(function (resolve, reject) {
             async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
-                this.getPayload().then(function (payload) {
-                    this.getMarks(semester, payload).then(function (marks) {
+                this.getPayload(request).then(function (payload) {
+                    this.getMarks(semester, payload, request).then(function (marks) {
                         _.forEach(marks, function (mark) {
                             for(var i = 0; i < disciplines.length; i++) {
                                 if (mark.name.indexOf(disciplines[i]) !== -1) {
