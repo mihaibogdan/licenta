@@ -175,7 +175,7 @@ module.exports = function() {
                     if (validateYear(year)) {
                         auth_service.keepConnectionAlive(senderID, request)
                             .then(function() {
-                                function scrapeMarks(senderID, year, [(year * 2) - 2, (year * 2) - 1]);
+                                marks_service.scrapeMarks(senderID, year, [(year * 2) - 2, (year * 2) - 1]);
                             })
                     } else {
                         communication_service.sendTextMessage(senderID, errors.year);
