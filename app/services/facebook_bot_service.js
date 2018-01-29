@@ -183,8 +183,9 @@ module.exports = function() {
                     break;
                 case 'nota':
                     var lowerCaseMessage = message.toLowerCase();
-                    var p = lowerCaseMessage.split(' ');
+                    var p = lowerCaseMessage.split(' ').slice(1).join(' ');
                     console.log(p);
+                    break;
                 case 'restante_an':
                     var year = parseInt(params[0]);
                     if (validateYear(year)) {
