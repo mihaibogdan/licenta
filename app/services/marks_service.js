@@ -201,8 +201,8 @@ module.exports = {
     },
 
     findMarks: function(senderID, disciplines, semesters) {
-        var finalMarks = [];
         return new Promise(function (resolve, reject) {
+            var finalMarks = [];
             async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
                 module.exports.getPayload().then(function (payload) {
                     module.exports.getMarks(semester, payload).then(function (marks) {
