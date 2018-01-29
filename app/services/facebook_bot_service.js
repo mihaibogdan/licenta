@@ -81,7 +81,7 @@ module.exports = function() {
         for (var i = 0; i < regularExpressions.length; i++) {
             match = lowerCaseMessage.match(regularExpressions[i].regExp);
             if (match) {
-                params = lowerCaseMessage.match(/\d not(a|ă)( +)*/g);
+                params = lowerCaseMessage.match(/\d/g);
                 handleMessage(messageText, regularExpressions[i].means, params, senderID, messageAttachments);
                 return ;
             }
@@ -182,8 +182,9 @@ module.exports = function() {
                     }
                     break;
                 case 'nota':
-                    console.log(params);
-                    break;
+                    var lowerCaseMessage = message.toLowerCase();
+                    var p = lowerCaseMessage.split(' ');
+                    console.log(p);
                 case 'restante_an':
                     var year = parseInt(params[0]);
                     if (validateYear(year)) {
