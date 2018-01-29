@@ -1,6 +1,7 @@
 var Promise = require('promise');
 var cheerio = require('cheerio');
 var request = require('request');
+var async = require('async');
 
 var _ = require('lodash');
 
@@ -180,5 +181,51 @@ module.exports = {
                 resolve(marks);
             });
         })
+    },
+    scrapeMarks:function(senderID, year, semesters) {
+        async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
+            communication_service.sendTextMessage(senderID, '-------An ' + year + ', semestrul ' + ((semester % 2) + 1) + '-------');
+
+            marks_service.getPayload().then(function(payload) {
+                marks_service.getMarks(semester, payload).then(function(marks) {
+                    async.eachSeries(marks, function markIteree(mark, markCallback) {
+                        communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
+                            markCallback(null);
+                        }));
+                    }, function done() {
+                        semesterCallback(null);
+                    });
+
+                })
+            });
+
+        }, function done() {})
+    },
+
+    findMarks: function(senderID, disciplines, semesters) {
+        var finalMarks = [];
+        return new Promise(function (resolve, reject) {
+            async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
+                marks_service.getPayload().then(function (payload) {
+                    marks_service.getMarks(semester, payload).then(function (marks) {
+                        _.forEach(marks, function (mark) {
+                            for(var i = 0; i < disciplines.length; i++) {
+                                if (mark.name.indexOf(disciplines[i]) !== -1) {
+                                    finalMarks.push(mark);
+                                }
+                            }
+                        });
+                    })
+                });
+            }, function done() {
+                async.eachSeries(finalMarks, function markIteree(mark, markCallback) {
+                    communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function () {
+                        markCallback(null);
+                    }));
+                }, function done() {
+                    resolve(finalMarks);
+                });
+            })
+        });
     }
 };

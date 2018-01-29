@@ -164,7 +164,7 @@ module.exports = function() {
                     if (validateYear(year) && validateSemester(semester)) {
                         auth_service.keepConnectionAlive(senderID, request)
                             .then(function() {
-                                scrapeMarks(senderID, year, [(year - 1) * 2 + (semester - 1)]);
+                                marks_service.scrapeMarks(senderID, year, [(year - 1) * 2 + (semester - 1)]);
                             })
                     } else {
                         communication_service.sendTextMessage(senderID, errors.semester);
@@ -175,7 +175,7 @@ module.exports = function() {
                     if (validateYear(year)) {
                         auth_service.keepConnectionAlive(senderID, request)
                             .then(function() {
-                                scrapeMarks(senderID, year, [(year * 2) - 2, (year * 2) - 1]);
+                                function scrapeMarks(senderID, year, [(year * 2) - 2, (year * 2) - 1]);
                             })
                     } else {
                         communication_service.sendTextMessage(senderID, errors.year);
@@ -184,7 +184,16 @@ module.exports = function() {
                 case 'nota':
                     var lowerCaseMessage = message.toLowerCase();
                     var p = lowerCaseMessage.split(' ').slice(1).join(' ');
-                    console.log(p);
+                    if (marks_service.abbreviations[p]) {
+                        marks_service.findMarks(senderID, marks_service.abbreviations[p], [0, 1, 2, 3, 4, 5])
+                            .then(function(result) {
+                               if (!result.length) {
+                                   communication_service.sendTextMessage(senderID, 'Inca nu este nicio nota la ' + marks_service.abbreviations[p].join(' '));
+                               }
+                            });
+                    } else {
+                        communication_service.sendTextMessage(senderID, 'Materia nu exista');
+                    }
                     break;
                 case 'restante_an':
                     var year = parseInt(params[0]);
@@ -244,30 +253,6 @@ module.exports = function() {
                 communication_service.sendTextMessage(senderID, 'Nu ai nicio restanta!');
             }
         });
-    }
-
-    function scrapeMarks(senderID, year, semesters) {
-        async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
-
-            communication_service.sendTextMessage(senderID, '-------An ' + year + ', semestrul ' + ((semester % 2) + 1) + '-------');
-
-            marks_service.getPayload().then(function(payload) {
-                marks_service.getMarks(semester, payload).then(function(marks) {
-                    async.eachSeries(marks, function markIteree(mark, markCallback) {
-                        communication_service.sendTextMessage(senderID, mark.name + ' ' + mark.value).then((function() {
-                            markCallback(null);
-                        }));
-                    }, function done() {
-                        semesterCallback(null);
-                    });
-
-                })
-            });
-
-        }, function done() {
-            //...
-        });
-
     }
 
     function verifyTaxes(senderID) {
