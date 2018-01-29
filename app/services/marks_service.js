@@ -163,6 +163,8 @@ module.exports = {
             url: url
         };
 
+        console.log(payload);
+
         return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
                 if (err)
@@ -172,10 +174,8 @@ module.exports = {
                 var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
 
 
-                for(var i = 0; i < discipline.length; i++) {
-                    if (i > 0) {
-                        marks.push({ name: discipline[i].children[4].children[0].children[0].data, value: discipline[i].children[5].children[0].children[0].data})
-                    }
+                for(var i = 1; i < discipline.length; i++) {
+                    marks.push({ name: discipline[i].children[4].children[0].children[0].data, value: discipline[i].children[5].children[0].children[0].data})
                 }
 
                 resolve(marks);
