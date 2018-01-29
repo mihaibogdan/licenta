@@ -162,14 +162,12 @@ module.exports = {
             form: payload,
             url: url
         };
-        console.log(semester);
 
         return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
                 if (err)
                     throw err;
                 var $ = cheerio.load(body);
-                console.log(body);
 
                 var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
 
@@ -207,7 +205,6 @@ module.exports = {
             var finalMarks = [];
             async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
                 module.exports.getPayload().then(function (payload) {
-                    // console.log(payload);
                     module.exports.getMarks(semester, payload).then(function (marks) {
                         _.forEach(marks, function (mark) {
                             for(var i = 0; i < disciplines.length; i++) {

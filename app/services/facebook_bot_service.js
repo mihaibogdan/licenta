@@ -185,12 +185,16 @@ module.exports = function() {
                     var lowerCaseMessage = message.toLowerCase();
                     var p = lowerCaseMessage.split(' ').slice(1).join(' ');
                     if (marks_service.abbreviations[p]) {
-                        marks_service.findMarks(senderID, marks_service.abbreviations[p], [0, 1, 2, 3, 4, 5])
-                            .then(function(result) {
-                               if (!result.length) {
-                                   communication_service.sendTextMessage(senderID, 'Inca nu este nicio nota la ' + marks_service.abbreviations[p].join(' '));
-                               }
+                        auth_service.keepConnectionAlive(senderID, request)
+                            .then(function() {
+                                marks_service.findMarks(senderID, marks_service.abbreviations[p], [0, 1, 2, 3, 4, 5])
+                                    .then(function(result) {
+                                        if (!result.length) {
+                                            communication_service.sendTextMessage(senderID, 'Inca nu este nicio nota la ' + marks_service.abbreviations[p].join(' '));
+                                        }
+                                    });
                             });
+
                     } else {
                         communication_service.sendTextMessage(senderID, 'Materia nu exista');
                     }
