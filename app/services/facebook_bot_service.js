@@ -13,23 +13,27 @@ request = request.defaults({jar: true});
 
 var regularExpressions = [
     {
-        regExp: /(note( +)an( +)\d( *)(,?)( *)semestru(l?)( +)\d)/g,
+        regExp: /(note( +)an( +)\d( *)(,?)( *)semestru(l?)( +)\d)/gi,
         means: 'note_semestru'
     },
     {
-        regExp: /(note( +)an( +)\d)/g,
+        regExp: /(note( +)an( +)\d)/gi,
         means: 'note_an'
     },
     {
-        regExp: /(restante( +)an( +)\d)/g,
+        regExp: /(not(a|ă)( +)*)\w+/gi,
+        means: 'nota'
+    },
+    {
+        regExp: /(restante( +)an( +)\d)/gi,
         means: 'restante_an'
     },
     {
-        regExp: /(restante)/g,
+        regExp: /(restante)/gi,
         means: 'restante'
     },
     {
-        regExp: /(taxe)/g,
+        regExp: /(taxe)/gi,
         means: 'taxe'
     },
     {
@@ -45,11 +49,11 @@ var regularExpressions = [
         means: 'orar_reset'
     },
     {
-        regExp: /(orar)/g,
+        regExp: /(orar)/gi,
         means: 'orar'
     },
     {
-        regExp: /(login)/g,
+        regExp: /(login)/gi,
         means: 'login'
     },
     {
@@ -176,6 +180,9 @@ module.exports = function() {
                     } else {
                         communication_service.sendTextMessage(senderID, errors.year);
                     }
+                    break;
+                case 'nota':
+                    console.log(params);
                     break;
                 case 'restante_an':
                     var year = parseInt(params[0]);
