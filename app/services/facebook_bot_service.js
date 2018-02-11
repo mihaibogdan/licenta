@@ -185,6 +185,7 @@ module.exports = function() {
                     break;
                 case 'nota':
                     var lowerCaseMessage = message.toLowerCase();
+                    lowerCaseMessage = lowerCaseMessage.replace('?', '');
                     var p = lowerCaseMessage.split(' ').slice(lowerCaseMessage.split(' ').length - 1).join(' ');
                     if (marks_service.abbreviations[p]) {
                         auth_service.keepConnectionAlive(senderID, request)
