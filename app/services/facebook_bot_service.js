@@ -13,11 +13,11 @@ request = request.defaults({jar: true});
 
 var regularExpressions = [
     {
-        regExp: /(note( +)an( +)\d( *)(,?)( *)semestru(l?)( +)\d)/gi,
+        regExp: /[a-zA-Z0-9 ]*(note[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d[a-zA-Z0-9 ,]semestru(l?)[a-zA-Z0-9 ]\d)/gi,
         means: 'note_semestru'
     },
     {
-        regExp: /(note( +)an( +)\d)/gi,
+        regExp: /[a-zA-Z0-9 ]*(note[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d)/gi,
         means: 'note_an'
     },
     {
@@ -25,7 +25,7 @@ var regularExpressions = [
         means: 'nota'
     },
     {
-        regExp: /(restante( +)an( +)\d)/gi,
+        regExp: /[a-zA-Z0-9 ]*(restante[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d)/gi,
         means: 'restante_an'
     },
     {
@@ -37,11 +37,11 @@ var regularExpressions = [
         means: 'taxe'
     },
     {
-        regExp: /(orar( +)m(a|â)ine)/gi,
+        regExp: /[a-zA-Z0-9 ]*(orar[a-zA-Z0-9 ]*m(a|â)ine)/gi,
         means: 'orar_maine'
     },
     {
-        regExp: /(orar( +)azi)/gi,
+        regExp: /[a-zA-Z0-9, ]*(orar[a-zA-Z0-9, ]*(azi|astazi))/gi,
         means: 'orar_azi'
     },
     {
@@ -64,7 +64,7 @@ var regularExpressions = [
 
 var errors = {
     year: 'Anul ar trebui sa fie 1, 2 sau 3',
-    semester: 'Anul ar trebui sa fie 1, 2 sau 3 iar semestrul ar trebuie sa fie 1 sau 2'
+    semester: 'Anul ar trebui sa fie 1, 2 sau 3, iar semestrul ar trebui sa fie 1 sau 2'
 };
 
 module.exports = function() {
