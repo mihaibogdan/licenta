@@ -13,11 +13,11 @@ request = request.defaults({jar: true});
 
 var regularExpressions = [
     {
-        regExp: /[a-zA-Z0-9 ]*(note[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d[a-zA-Z0-9 ,]*semestru(l?)[a-zA-Z0-9 ]\d)/gi,
+        regExp: /[a-zA-Z0-9ăîâțșĂÎÂȚȘ ]*(note[a-zA-Z0-9țșĂÎÂȚȘ ]*(an|anul)[a-zA-Z0-9țșĂÎÂȚȘ ]*\d[a-zA-Z0-9țșĂÎÂȚȘ ,]*semestru(l?)[a-zA-Z0-9țșĂÎÂȚȘ ]\d)/gi,
         means: 'note_semestru'
     },
     {
-        regExp: /[a-zA-Z0-9 ]*(note[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d)/gi,
+        regExp: /[a-zA-Z0-9țșĂÎÂȚȘ ]*(note[a-zA-Z0-9țșĂÎÂȚȘ ]*(an|anul)[a-zA-Z0-9țșĂÎÂȚȘ ]*\d)/gi,
         means: 'note_an'
     },
     {
@@ -25,7 +25,7 @@ var regularExpressions = [
         means: 'nota'
     },
     {
-        regExp: /[a-zA-Z0-9 ]*(restante[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d)/gi,
+        regExp: /[a-zA-Z0-9țșĂÎÂȚȘ ]*(restante[a-zA-Z0-9țșĂÎÂȚȘ ]*(an|anul)[a-zA-Z0-9țșĂÎÂȚȘ ]*\d)/gi,
         means: 'restante_an'
     },
     {
@@ -37,11 +37,11 @@ var regularExpressions = [
         means: 'taxe'
     },
     {
-        regExp: /[a-zA-Z0-9 ]*(orar[a-zA-Z0-9 ]*m(a|â)ine)/gi,
+        regExp: /[a-zA-Z0-9țșĂÎÂȚȘ ]*(orar[a-zA-Z0-9țșĂÎÂȚȘ ]*m(a|â)ine)/gi,
         means: 'orar_maine'
     },
     {
-        regExp: /[a-zA-Z0-9, ]*(orar[a-zA-Z0-9, ]*(azi|astazi))/gi,
+        regExp: /[a-zA-Z0-9țșĂÎÂȚȘ, ]*(orar[a-zA-Z0-9țșĂÎÂȚȘ, ]*(azi|astazi))/gi,
         means: 'orar_azi'
     },
     {
