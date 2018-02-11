@@ -242,7 +242,7 @@ module.exports = function() {
 
     function showDebts(senderID, semesters) {
         var restante = 0;
-        async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
+        async.each(semesters, function semesterIteree(semester, semesterCallback) {
             marks_service.getPayload().then(function(payload) {
                 marks_service.getMarks(semester, payload).then(function(marks) {
                     for (var i = 0; i < marks.length; i++) {
