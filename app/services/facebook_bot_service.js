@@ -261,41 +261,45 @@ module.exports = function() {
         });
     }
 
-    function verifyTaxes(senderID) {
+    function verifyTaxes(senderID, semesters) {
         var marks = [];
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
-        marks_service.getPayload().then(function(payloadGrades) {
-            var options = {
-                method: 'post',
-                form: payloadGrades,
-                url: url
-            };
-            var atLeastOne = false;
+        var atLeastOne = false;
+        return new Promise(function(resolve, reject) {
 
-            return new Promise(function(resolve, reject) {
-                request(options, function(err, resp, body) {
-                    if (err)
-                        throw err;
-                    var $ = cheerio.load(body);
+            async.each(semesters, function semesterIteree(semester, semesterCallback) {
+                marks_service.getPayload().then(function (payload) {
+                    payload.__EVENTARGUMENT = 'Select$' + semester;
+                    var options = {
+                        method: 'post',
+                        form: payload,
+                        url: url
+                    };
+                    request(options, function (err, resp, body) {
+                        if (err)
+                            throw err;
+                        var $ = cheerio.load(body);
 
 
-                    var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp1896648950_wp1261240874_GridViewTaxe tr');
+                        var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp1896648950_wp1261240874_GridViewTaxe tr');
 
-                    for(var i = 0; i < discipline.length; i++) {
-                        if (i > 0) {
-                            if (!discipline[i].children[1].children[0].children[0].data) {
-                                communication_service.sendTextMessage(senderID, discipline[i].children[1].children[0].children[0].data + ' ' + discipline[i].children[2].children[0].children[0].data);
-                                atLeastOne = true;
+                        for (var i = 0; i < discipline.length; i++) {
+                            if (i > 0) {
+                                if (!discipline[i].children[1].children[0].children[0].data) {
+                                    communication_service.sendTextMessage(senderID, discipline[i].children[1].children[0].children[0].data + ' ' + discipline[i].children[2].children[0].children[0].data);
+                                    atLeastOne = true;
+                                }
                             }
                         }
-                    }
-
-                    if (!atLeastOne) {
-                        communication_service.sendTextMessage(senderID, 'Nu ai de platit nicio taxa!');
-                    }
-                    resolve();
-                });
-            })
+                        semesterCallback();
+                    });
+                })
+            }, function (err) {
+                if (!atLeastOne) {
+                    communication_service.sendTextMessage(senderID, 'Nu ai de platit nicio taxa!');
+                }
+                resolve();
+            });
         });
     }
 
