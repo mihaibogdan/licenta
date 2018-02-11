@@ -13,7 +13,7 @@ request = request.defaults({jar: true});
 
 var regularExpressions = [
     {
-        regExp: /[a-zA-Z0-9 ]*(note[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d[a-zA-Z0-9 ,]semestru(l?)[a-zA-Z0-9 ]\d)/gi,
+        regExp: /[a-zA-Z0-9 ]*(note[a-zA-Z0-9 ]*(an|anul)[a-zA-Z0-9 ]*\d[a-zA-Z0-9 ,]*semestru(l?)[a-zA-Z0-9 ]\d)/gi,
         means: 'note_semestru'
     },
     {
