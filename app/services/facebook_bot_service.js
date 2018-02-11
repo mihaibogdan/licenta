@@ -86,6 +86,8 @@ module.exports = function() {
                 return ;
             }
         }
+
+        communication_service.sendTextMessage(senderID, 'Mai incercati o data, poate ati gresit o litera.');
     }
 
     function handleQuickReply(event) {
@@ -114,8 +116,8 @@ module.exports = function() {
     }
 
     function handleMessage (message, meaning, params, senderID, messageAttachments) {
+        communication_service.startTyping(senderID);
         if (meaning) {
-
             switch (meaning) {
                 case 'login':
                     communication_service.sendLoginButton(senderID);

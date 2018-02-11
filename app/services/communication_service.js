@@ -5,6 +5,36 @@ var Promise = require('promise');
 var templates_service = require('./templates_service');
 
 module.exports = {
+    startTyping: function(recipientId) {
+        var messageData = {
+            recipient: {
+                id: recipientId
+            },
+            "sender_action":"typing_on"
+        };
+        request({
+                uri: 'https://graph.facebook.com/v2.6/me/messages',
+                qs: { access_token: PAGE_ACCESS_TOKEN },
+                method: 'POST',
+                json: messageData
+
+            }, function (error, response, body) {})
+    },
+    finishTyping: function(recipientId) {
+        var messageData = {
+            recipient: {
+                id: recipientId
+            },
+            "sender_action":"typing_off"
+        };
+        request({
+            uri: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: { access_token: PAGE_ACCESS_TOKEN },
+            method: 'POST',
+            json: messageData
+
+        }, function (error, response, body) {})
+    },
     sendTextMessage: function(recipientId, messageText) {
         return new Promise(function(resolve, reject) {
             var messageData = {
@@ -20,7 +50,6 @@ module.exports = {
                 resolve();
             });
         })
-
     },
     callSendAPI: function(messageData) {
         return new Promise(function(resolve, reject) {
