@@ -182,7 +182,7 @@ module.exports = {
     },
     scrapeMarks:function(senderID, year, semesters) {
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
-            communication_service.sendTextMessage(senderID, '-------An ' + year + ', semestrul ' + ((semester % 2) + 1) + '-------');
+            communication_service.sendTextMessage(senderID, '-Anul ' + year + ', semestrul ' + ((semester % 2) + 1) + '-');
 
             module.exports.getPayload().then(function(payload) {
                 module.exports.getMarks(semester, payload).then(function(marks) {
