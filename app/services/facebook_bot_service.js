@@ -296,7 +296,7 @@ module.exports = function() {
                 })
             }, function (err) {
                 if (!atLeastOne) {
-                    communication_service.sendTextMessage(senderID, 'Nu ai de platit nicio taxa!');
+                    communication_service.sendTextMessage(senderID, 'Nu ai nicio taxă restantă.');
                 }
                 resolve();
             });
