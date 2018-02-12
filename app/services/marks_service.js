@@ -18,7 +18,7 @@ var hiddenInputs = [
 
 var payloadsGrades = {
     '__WPPS': 'u',
-    '__EVENTTARGET': 'ctl00$WebPartManagerPanel1$WebPartManager1$wp1153997053$wp964809087$gridStudenti',
+    '__EVENTTARGET': 'ctl00$WebPartManagerPanel1$WebPartManager1$wp237320595$wp949053091$gridStudenti',
     '__EVENTARGUMENT': 'Select$0',
     '__VIEWSTATE': '',
     '__VIEWSTATEGENERATOR': '',
