@@ -174,6 +174,7 @@ module.exports = function() {
                     break;
                 case 'note_an':
                     var year = parseInt(params[0]);
+                    console.log(year);
                     if (validateYear(year)) {
                         auth_service.keepConnectionAlive(senderID, request)
                             .then(function() {
