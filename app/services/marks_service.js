@@ -163,6 +163,7 @@ module.exports = {
             url: url
         };
 
+        console.log(payload.__EVENTARGUMENT);
         return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
                 if (err)
@@ -170,7 +171,6 @@ module.exports = {
                 var $ = cheerio.load(body);
 
                 var discipline = $('table[id$="GridViewNote"] tr');
-                console.log(discipline);
 
                 for(var i = 1; i < discipline.length; i++) {
                     marks.push({ name: discipline[i].children[4].children[0].children[0].data, value: discipline[i].children[5].children[0].children[0].data})
@@ -181,6 +181,7 @@ module.exports = {
         })
     },
     scrapeMarks:function(senderID, year, semesters) {
+        console.log('semesters', semesters);
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
             communication_service.sendTextMessage(senderID, '-Anul ' + year + ', semestrul ' + ((semester % 2) + 1) + '-');
 
