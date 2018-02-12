@@ -12,7 +12,9 @@ app.use(bodyParser.json());
 app.get('/static/index.html', function (req, res) {
    res.sendFile( __dirname + "/static/" + "index.html" );
 });
-app.use('/static/index.html', express.static(__dirname + "/static"));
+app.get('/static/logo_small.png', function (req, res) {
+   res.sendFile( __dirname + "/static/" + "logo_small.png" );
+});
 
 
 app.get('/', function (req, res) {
