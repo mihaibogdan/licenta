@@ -9,10 +9,11 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static('static'))
 app.get('/static/index.html', function (req, res) {
    res.sendFile( __dirname + "/static/" + "index.html" );
 });
+app.use('/static/index.html', express.static(__dirname + "/static"));
+
 
 app.get('/', function (req, res) {
     res.send('Hello world');
