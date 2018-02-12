@@ -13,8 +13,7 @@ request = request.defaults({jar: true});
 var hiddenInputs = [
     '__VIEWSTATE',
     '__VIEWSTATEGENERATOR',
-    '__EVENTVALIDATION',
-    '__EVENTTARGET'
+    '__EVENTVALIDATION'
 ];
 
 var payloadsGrades = {
@@ -139,6 +138,7 @@ module.exports = {
     },
     getPayload: function() {
         var url = 'http://simsweb.uaic.ro/eSIMS/Members/StudentPage.aspx';
+        reg = /doPostBack\('(.*)','Select\$0'/g;
         return new Promise(function(resolve, reject) {
             request(url, function(err, resp, body) {
                 if (err)
@@ -148,6 +148,12 @@ module.exports = {
                 _.forEach(hiddenInputs, function (input) {
                     payloadsGrades[input] = $('#' + input).val();
                 });
+
+                var matches = [];
+                while (m = reg.exec(body)) {
+                  matches.push(m[1]);
+                }
+                payloadsGrades['__EVENTTARGET'] = matches[0];
 
                 resolve(payloadsGrades);
             });
