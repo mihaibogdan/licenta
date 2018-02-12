@@ -167,10 +167,10 @@ module.exports = {
             request(options, function(err, resp, body) {
                 if (err)
                     throw err;
-                console.log(body);
                 var $ = cheerio.load(body);
 
-                var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
+                var discipline = $('table[id*="GridViewNote"] tr');
+                                     ctl00_WebPartManagerPanel1_WebPartManager1_wp1533282933_wp1057989110_GridViewNote
 
 
                 for(var i = 1; i < discipline.length; i++) {
