@@ -170,8 +170,6 @@ module.exports = {
                 var $ = cheerio.load(body);
 
                 var discipline = $('table[id*="GridViewNote"] tr');
-                                     ctl00_WebPartManagerPanel1_WebPartManager1_wp1533282933_wp1057989110_GridViewNote
-
 
                 for(var i = 1; i < discipline.length; i++) {
                     marks.push({ name: discipline[i].children[4].children[0].children[0].data, value: discipline[i].children[5].children[0].children[0].data})
