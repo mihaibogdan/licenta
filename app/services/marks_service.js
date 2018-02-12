@@ -170,7 +170,6 @@ module.exports = {
             url: url
         };
 
-        console.log(payload.__EVENTARGUMENT);
         return new Promise(function(resolve, reject) {
             request(options, function(err, resp, body) {
                 if (err)
@@ -188,7 +187,7 @@ module.exports = {
         })
     },
     scrapeMarks:function(senderID, year, semesters) {
-        console.log('semesters', semesters);
+    
         async.eachSeries(semesters, function semesterIteree(semester, semesterCallback) {
             communication_service.sendTextMessage(senderID, '-Anul ' + year + ', semestrul ' + ((semester % 2) + 1) + '-');
 

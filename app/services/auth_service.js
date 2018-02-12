@@ -56,7 +56,6 @@ module.exports = {
                 if (!loggedIn) {
                     firebase.database.ref('users/' + userID).once('value', function(snapshot) {
                         var user = snapshot.val();
-                        console.log('user', user);
                         if (!user) {
                             communication_service.sendLoginButton(userID);
                             reject();
@@ -66,7 +65,7 @@ module.exports = {
                             var decrypted = cryptoJSON.decrypt(JSON.parse(user.credentials), passKey, {
                                 keys: []
                             });
-                            console.log('decrypted', decrypted);
+
                             module.exports.login(decrypted.username, decrypted.password, request).then(function() {
                                 resolve();
                             });
