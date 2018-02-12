@@ -1,13 +1,17 @@
 <html>
 <head>
-	<title>Licenta</title>
+	<title>eSIMS Bot</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
 	<form action="https://pure-waters-25616.herokuapp.com/esims/login" method="POST">
-	Username: <input type = "text" name = "ctl00$mainCopy$Login1$UserName">  <br>
-         Password: <input type = "password" name = "ctl00$mainCopy$Login1$Password">
-         <input type = "hidden" id="redirect_uri" name = "redirect_uri">
-         <input type = "submit" value = "Submit"></form>
+        <img src="./logo_small.png" />
+        <h1>Login în eSIMS</h1>
+	     <input type="text" placeholder="Număr matricol" name="ctl00$mainCopy$Login1$UserName">  <br>
+         <input type="password" placeholder="Parolă" name="ctl00$mainCopy$Login1$Password">
+         <input type="hidden" id="redirect_uri" name="redirect_uri">
+         <input type="submit" value="CONECTARE"></form>
 	<script>
         function QueryString() {
             // This function is anonymous, is executed immediately and
