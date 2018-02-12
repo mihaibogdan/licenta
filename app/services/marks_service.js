@@ -13,12 +13,13 @@ request = request.defaults({jar: true});
 var hiddenInputs = [
     '__VIEWSTATE',
     '__VIEWSTATEGENERATOR',
-    '__EVENTVALIDATION'
+    '__EVENTVALIDATION',
+    '__EVENTTARGET'
 ];
 
 var payloadsGrades = {
     '__WPPS': 'u',
-    '__EVENTTARGET': 'ctl00$WebPartManagerPanel1$WebPartManager1$wp237320595$wp949053091$gridStudenti',
+    '__EVENTTARGET': '',
     '__EVENTARGUMENT': 'Select$0',
     '__VIEWSTATE': '',
     '__VIEWSTATEGENERATOR': '',
