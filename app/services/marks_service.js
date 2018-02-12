@@ -167,6 +167,7 @@ module.exports = {
             request(options, function(err, resp, body) {
                 if (err)
                     throw err;
+                console.log(body);
                 var $ = cheerio.load(body);
 
                 var discipline = $('#ctl00_WebPartManagerPanel1_WebPartManager1_wp523396956_wp729632565_GridViewNote tr');
